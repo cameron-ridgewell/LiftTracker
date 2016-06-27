@@ -29,11 +29,12 @@
     </style>
 
     <style name="create_item_input_title">
-        <item name="android:textSize">18dp</item>
+        <item name="android:textSize">15dp</item>
+        <item name="android:textStyle">italic</item>
     </style>
 
     <style name="create_item_input_edittext">
-        <item name="android:textSize">18dp</item>
+        <item name="android:textSize">17dp</item>
         <item name="android:singleLine">true</item>
     </style>
 
