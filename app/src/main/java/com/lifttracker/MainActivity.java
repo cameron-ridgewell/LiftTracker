@@ -3,13 +3,7 @@ package com.lifttracker;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,9 +16,6 @@ import android.view.MenuItem;
 
 import com.lifttracker.common.Exercise;
 import com.lifttracker.utilities.ServerRequest;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -165,11 +156,13 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.create_exercise) {
-            Fragment fragment = CreateExercise.newInstance();
-            this.getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, fragment, CREATE_EXERCISE_FRAGMENT)
-                    .addToBackStack(CREATE_EXERCISE_FRAGMENT)
-                    .commit();
+//            Fragment fragment = CreateExerciseDialog.newInstance();
+//            this.getSupportFragmentManager().beginTransaction()
+//                    .replace(R.id.fragment_container, fragment, CREATE_EXERCISE_FRAGMENT)
+//                    .addToBackStack(CREATE_EXERCISE_FRAGMENT)
+//                    .commit();
+            CreateExerciseDialog createExerciseDialog = CreateExerciseDialog.newInstance();
+            createExerciseDialog.show(getSupportFragmentManager(), CREATE_EXERCISE_FRAGMENT);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

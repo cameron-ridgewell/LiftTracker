@@ -1,59 +1,97 @@
 package com.lifttracker;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lifttracker.common.Exercise;
+import com.lifttracker.utilities.ServerRequest;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
-public class CreateExercise extends Fragment {
+public class CreateExerciseDialog extends DialogFragment {
 
     private OnFragmentInteractionListener mListener;
     private Spinner workout_type_spinner;
     private Spinner lift_type_spinner;
+    private EditText exercise_name_text;
     private View rootView;
+    private ServerRequest svc;
 
-    public CreateExercise() {
+    public CreateExerciseDialog() {
         // Required empty public constructor
     }
 
 
-    public static CreateExercise newInstance() {
-        CreateExercise fragment = new CreateExercise();
+    public static CreateExerciseDialog newInstance() {
+        CreateExerciseDialog fragment = new CreateExerciseDialog();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
         }
-    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        svc = ServerRequest.getInstance();
 
-        rootView = inflater.inflate(R.layout.fragment_create_exercise, container, false);
+        rootView = getActivity().getLayoutInflater()
+                .inflate(R.layout.fragment_create_exercise, null);
 
         setupView();
 
-        return rootView;
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setView(rootView)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String exercise_name = exercise_name_text.getText().toString();
+                        if (!exercise_name.equals(""))
+                        {
+                            Exercise newExercise = new Exercise(exercise_name);
+                            newExercise.setExerciseType(Exercise.ExerciseType
+                                    .values()[workout_type_spinner.getSelectedItemPosition()]);
+                            if (Exercise.ExerciseType.values()[workout_type_spinner
+                                    .getSelectedItemPosition()]
+                                    == Exercise.ExerciseType.Weightlifting)
+                            {
+                                newExercise.setLiftType(Exercise.LiftType.values()[lift_type_spinner.getSelectedItemPosition()]);
+                            }
+                            else
+                            {
+                                newExercise.setLiftType(Exercise.LiftType.None);
+                            }
+
+                            //TODO: Toast response of this
+                            Toast.makeText(getContext(), "Thing happened", Toast.LENGTH_SHORT).show();
+
+                            svc.addExercise(newExercise);
+                        }
+                    }})
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dismiss();
+                    }
+                });
+        return builder.create();
     }
 
     private void setupView()
@@ -69,6 +107,8 @@ public class CreateExercise extends Fragment {
                 enumToStringArray(Exercise.LiftType.values()));
         lift_type_spinner = (Spinner) findViewById(R.id.lift_type_spinner);
         lift_type_spinner.setAdapter(liftTypeAdapter);
+
+        exercise_name_text = (EditText) findViewById(R.id.exercise_name_input);
     }
 
     public void onButtonPressed(Uri uri) {
@@ -85,15 +125,14 @@ public class CreateExercise extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 //if the category is Weightlifting, request Liftype, otherwise, hide spinner
+                LinearLayout exercise_type_input_block
+                        = (LinearLayout) findViewById(R.id.exercise_type_input_block);
                 if (Exercise.ExerciseType.values()[position] != Exercise.ExerciseType.Weightlifting)
                 {
-                    TextView spinnerText = (TextView) findViewById(R.id.lift_type_text);
-                    spinnerText.setVisibility(View.GONE);
-                    lift_type_spinner.setVisibility(View.GONE);
-                } else {
-                    TextView spinnerText = (TextView) findViewById(R.id.lift_type_text);
-                    spinnerText.setVisibility(View.VISIBLE);
-                    lift_type_spinner.setVisibility(View.VISIBLE);
+                    exercise_type_input_block.setVisibility(View.GONE);
+                }
+                else {
+                    exercise_type_input_block.setVisibility(View.VISIBLE);
                 }
             }
 

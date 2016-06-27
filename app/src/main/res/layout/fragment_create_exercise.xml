@@ -2,13 +2,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.lifttracker.CreateExercise"
+    tools:context=".CreateExerciseDialog"
     android:padding="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:id="@+id/exercise_name_input_block"
         android:padding="10dp">
         <TextView
@@ -28,7 +28,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:id="@+id/exercise_type_input_block"
         android:layout_below="@id/exercise_name_input_block"
         android:padding="10dp">
@@ -48,7 +48,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_below="@+id/exercise_type_input_block"
         android:padding="10dp">
         <TextView
