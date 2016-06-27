@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_width="@dimen/superset_block_width"
+        android:layout_height="fill_parent"
+        android:background="@drawable/superset_side_rect"
+        android:id="@+id/superset_block"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/superset_block">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ExerciseTitle"
+            android:id="@+id/exercise_title"
+            style="@style/exercise_list_title_text"/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/exercise_title"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Weight x Reps"
+                android:id="@+id/set_info"
+                style="@style/set_info_list_text"/>
+        </RelativeLayout>
+    </RelativeLayout>
+</LinearLayout>
