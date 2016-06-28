@@ -14,13 +14,15 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lifttracker.common.Exercise;
+import com.lifttracker.utilities.ResponseAction;
 import com.lifttracker.utilities.ServerRequest;
 
 import java.util.ArrayList;
+
+import retrofit2.Response;
 
 public class CreateExerciseDialog extends DialogFragment {
 
@@ -64,7 +66,7 @@ public class CreateExerciseDialog extends DialogFragment {
                         String exercise_name = exercise_name_text.getText().toString();
                         if (!exercise_name.equals(""))
                         {
-                            Exercise newExercise = new Exercise(exercise_name);
+                            final Exercise newExercise = new Exercise(exercise_name);
                             newExercise.setExerciseType(Exercise.ExerciseType
                                     .values()[workout_type_spinner.getSelectedItemPosition()]);
                             if (Exercise.ExerciseType.values()[workout_type_spinner
@@ -78,10 +80,7 @@ public class CreateExerciseDialog extends DialogFragment {
                                 newExercise.setLiftType(Exercise.LiftType.None);
                             }
 
-                            //TODO: Toast response of this
-                            Toast.makeText(getContext(), "Thing happened", Toast.LENGTH_SHORT).show();
-
-                            svc.addExercise(newExercise);
+                            svc.addExercise(newExercise, getContext());
                         }
                     }})
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -165,7 +164,6 @@ public class CreateExerciseDialog extends DialogFragment {
         ArrayList<String> arrayList = new ArrayList<>();
         for (Object obj : objArr)
         {
-            Log.e("TAG", obj.toString());
             arrayList.add(obj.toString());
         }
         return arrayList.toArray(new String[0]);

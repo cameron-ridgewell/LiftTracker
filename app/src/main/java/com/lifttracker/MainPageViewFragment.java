@@ -76,9 +76,7 @@ public class MainPageViewFragment extends Fragment {
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getFragmentManager());
         adapter.addFragment(new WorkoutFragment(), "ONE");
-        adapter.addFragment(new WorkoutFragment(), "TWO");
-        adapter.addFragment(new WorkoutFragment(), "THREE");
-        adapter.addFragment(new WorkoutFragment(), "FOUR");
+        adapter.addFragment(new ExerciseSearchFragment(), "TWO");
         viewPager.setAdapter(adapter);
     }
 

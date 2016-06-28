@@ -2,9 +2,12 @@ package com.lifttracker.utilities;
 
 import com.lifttracker.common.Exercise;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -21,6 +24,29 @@ import retrofit2.http.Query;
  */
 public interface RequestLibrary {
 
+    /**
+     * Generic HttpBin.org Response Container
+     */
+    static class HttpBinResponse {
+        // the request url
+        String url;
+
+        // the requester ip
+        String origin;
+
+        // all headers that have been sent
+        Map headers;
+
+        // url arguments
+        Map args;
+
+        // post form parameters
+        Map form;
+
+        // post body json
+        Map json;
+    }
+
 //    @POST("/invitation/")
 //    public void invite(@Body Invitation invitation, Callback<String> success);
 //
@@ -32,5 +58,8 @@ public interface RequestLibrary {
 //                                 Callback<Invitation> success);
 
     @POST("/exercise/?type=new")
-    public Call<Exercise> addExercise(@Body Exercise exercise);
+    public Call<HttpBinResponse> addExercise(@Body Exercise exercise);
+
+    @GET("/exercise/?filter=none")
+    public Call<List<Exercise>> getAllExercises();
 }

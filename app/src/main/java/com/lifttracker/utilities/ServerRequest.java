@@ -1,16 +1,21 @@
 package com.lifttracker.utilities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -24,6 +29,7 @@ import org.joda.time.DateTime;
  * Created by cameronridgewell on 2/10/15.
  */
 public class ServerRequest {
+
     //http://192.168.56.1:8080 for genymotion NOTE: sometimes http://10.0.3.2:8080
     //private final String ip_address = "http://192.168.56.1:8080" // for genymotion
     //private final String ip_address = "http://10.0.2.2:8080" // for android emulator
@@ -46,23 +52,54 @@ public class ServerRequest {
         }
     }
 
-    private static < E > void execute(Call<E> call)
+    private static < E > void execute(Call<E> call, final ResponseAction responseAction)
     {
         call.enqueue(new Callback<E>() {
             @Override
             public void onResponse(Call<E> call, Response<E> response) {
-
+                responseAction.action(response);
             }
 
             @Override
             public void onFailure(Call<E> call, Throwable t) {
-
+                Log.e("Error", "Call Failure");
             }
         });
     }
 
-    public void addExercise(final Exercise exercise) {
-        Call<Exercise> call = svc.addExercise(exercise);
-        execute(call);
+    private static < E > void execute(Call<E> serverCall, final ResponseAction responseAction,
+                                      final String failureText)
+    {
+        serverCall.enqueue(new Callback<E>() {
+            @Override
+            public void onResponse(Call<E> call, Response<E> response) {
+                responseAction.action(response);
+            }
+
+            @Override
+            public void onFailure(Call<E> call, Throwable t) {
+                Log.e("Error", t.getCause().toString());
+            }
+        });
+    }
+
+    public void addExercise(final Exercise exercise, final Context context) {
+        Call<RequestLibrary.HttpBinResponse> call = svc.addExercise(exercise);
+        execute(call, new ResponseAction() {
+            @Override
+            public void action(Object input) {
+                if (((Response) input).code() < 400)
+                {
+                    Toast.makeText(context, "Exercise "
+                            + exercise.getName() + " Added",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, "addExercise Call failed");
+    }
+
+    public void getAllExercises(final ResponseAction responseAction) {
+        Call<List<Exercise>> call = svc.getAllExercises();
+        execute(call, responseAction);
     }
 }

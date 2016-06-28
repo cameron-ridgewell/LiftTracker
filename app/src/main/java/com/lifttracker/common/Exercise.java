@@ -4,6 +4,7 @@ package com.lifttracker.common;
  * Created by cameronridgewell on 6/24/16.
  */
 
+import com.google.gson.annotations.SerializedName;
 import com.lifttracker.common.Workout;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public class Exercise {
         Weightlifting, Cardiovascular, Stretching, Other, None
     }
 
+    @SerializedName("_id")
     private String id_;
     private String name_;
     private LiftType liftType_;
