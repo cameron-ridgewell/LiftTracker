@@ -1,4 +1,4 @@
-package com.lifttracker;
+package com.lifttracker.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.lifttracker.elements.WorkoutRecyclerViewAdapter;
+import com.lifttracker.R;
 import com.lifttracker.common.Exercise;
 import com.lifttracker.common.Set;
 import com.lifttracker.common.Workout;
@@ -75,7 +77,7 @@ public class WorkoutFragment extends Fragment {
             myWorkout.addExercise(new Exercise("Swimming"));
             myWorkout.addExercise(new Exercise("Not Swimming"));
             myWorkout.getExerciseList().get(0).addSet(new Set(10, 104.5));
-            recyclerView.setAdapter(new MyWorkoutRecyclerViewAdapter(myWorkout, mListener,
+            recyclerView.setAdapter(new WorkoutRecyclerViewAdapter(myWorkout, mListener,
                     getContext()));
         }
         return view;

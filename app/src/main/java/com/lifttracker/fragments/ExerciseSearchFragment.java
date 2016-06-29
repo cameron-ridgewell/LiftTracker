@@ -1,20 +1,23 @@
-package com.lifttracker;
+package com.lifttracker.fragments;
 
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.EditText;
+import android.widget.ListView;
 
+import com.lifttracker.R;
 import com.lifttracker.common.Exercise;
 import com.lifttracker.utilities.ResponseAction;
 import com.lifttracker.utilities.ServerRequest;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import retrofit2.Response;
@@ -33,6 +36,9 @@ public class ExerciseSearchFragment extends Fragment {
     private View rootView;
     private ArrayList<Exercise> exerciseList = new ArrayList<>();
     private OnFragmentInteractionListener mListener;
+
+    private EditText exercise_search;
+    private ListView exercise_list_view;
 
     public ExerciseSearchFragment() {
         // Required empty public constructor
@@ -65,13 +71,32 @@ public class ExerciseSearchFragment extends Fragment {
                 {
                     exerciseList.clear();
                     exerciseList.addAll(((Response<List<Exercise>>) input).body());
+                    Collections.sort(exerciseList, new Comparator<Exercise>() {
+                        @Override public int compare(Exercise e1, Exercise e2) {
+                            return e1.getName().compareTo(e2.getName()); // Ascending
+                        }
+
+                    });
                 }
             }
         });
+
+        setupView();
+
         return rootView;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+    private void setupView()
+    {
+        exercise_search = (EditText) findViewById(R.id.exercise_search);
+        //TODO listener for change and search
+//        exercise_list_view = (ListView) findViewById(R.id.list_view);
+//        SimpleExerciseArrayAdapter itemsAdapter = new SimpleExerciseArrayAdapter(getContext(),
+//                exerciseList);
+//        exercise_list_view.setAdapter(itemsAdapter);
+
+    }
+
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -102,5 +127,10 @@ public class ExerciseSearchFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private View findViewById(int id)
+    {
+        return rootView.findViewById(id);
     }
 }

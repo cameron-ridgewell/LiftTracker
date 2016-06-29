@@ -1,4 +1,4 @@
-package com.lifttracker;
+package com.lifttracker.fragments;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -7,22 +7,18 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.Toast;
 
+import com.lifttracker.R;
 import com.lifttracker.common.Exercise;
-import com.lifttracker.utilities.ResponseAction;
 import com.lifttracker.utilities.ServerRequest;
 
 import java.util.ArrayList;
-
-import retrofit2.Response;
 
 public class CreateExerciseDialog extends DialogFragment {
 

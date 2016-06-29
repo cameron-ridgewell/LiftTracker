@@ -1,4 +1,4 @@
-package com.lifttracker;
+package com.lifttracker.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -14,6 +14,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.lifttracker.fragments.CreateExerciseDialog;
+import com.lifttracker.fragments.MainPageViewFragment;
+import com.lifttracker.R;
 import com.lifttracker.common.Exercise;
 import com.lifttracker.utilities.ServerRequest;
 

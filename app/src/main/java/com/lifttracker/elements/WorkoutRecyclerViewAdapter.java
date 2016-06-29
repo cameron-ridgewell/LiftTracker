@@ -1,4 +1,4 @@
-package com.lifttracker;
+package com.lifttracker.elements;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,21 +8,23 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.lifttracker.R;
 import com.lifttracker.common.Set;
 import com.lifttracker.common.Workout;
 import com.lifttracker.common.WorkoutItem;
+import com.lifttracker.fragments.WorkoutFragment;
 
 import java.util.List;
 
-public class MyWorkoutRecyclerViewAdapter extends
-        RecyclerView.Adapter<MyWorkoutRecyclerViewAdapter.ViewHolder> {
+public class WorkoutRecyclerViewAdapter extends
+        RecyclerView.Adapter<WorkoutRecyclerViewAdapter.ViewHolder> {
 
     private final List<WorkoutItem> mValues;
     private final WorkoutFragment.OnListFragmentInteractionListener mListener;
     private Context mContext;
 
-    public MyWorkoutRecyclerViewAdapter(Workout workout,
-            WorkoutFragment.OnListFragmentInteractionListener listener, Context context) {
+    public WorkoutRecyclerViewAdapter(Workout workout,
+                                      WorkoutFragment.OnListFragmentInteractionListener listener, Context context) {
         mValues = workout.getExerciseList();
         mListener = listener;
         mContext = context;

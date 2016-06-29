@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryLight">#7986CB</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="superset_rect">#FF4081</color>
+    <color name="search_bar_background">@color/colorPrimary</color>
+    <color name="search_bar_background_interior">@color/colorPrimaryLight</color>
+    <color name="alt_text_light">#FFFFFF</color>
 </resources>
