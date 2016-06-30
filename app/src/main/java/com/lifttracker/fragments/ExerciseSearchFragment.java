@@ -14,8 +14,11 @@ import android.widget.ListView;
 import com.lifttracker.R;
 import com.lifttracker.common.Exercise;
 import com.lifttracker.elements.ExerciseSearchFragmentAdapter;
+import com.lifttracker.utilities.MemoryRequisition;
 import com.lifttracker.utilities.ResponseAction;
 import com.lifttracker.utilities.ServerRequest;
+
+import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -80,7 +83,14 @@ public class ExerciseSearchFragment extends Fragment {
 
                     });
 
-                    Log.e("Tag", exerciseList.get(0).getName());
+//                    for (Exercise e : exerciseList)
+//                    {
+//                        MemoryRequisition.getInstance(getContext())
+//                                .addExerciseDbItem(e, new DateTime());
+//                    }
+
+                    Log.e("Tag", MemoryRequisition.getInstance(getContext())
+                            .getExerciseDbItem(exerciseList.get(0).getName()).getName());
                 }
             }
         });

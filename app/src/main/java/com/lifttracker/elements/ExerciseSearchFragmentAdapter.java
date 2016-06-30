@@ -23,6 +23,8 @@ public class ExerciseSearchFragmentAdapter extends ArrayAdapter<Exercise> {
 
     public ExerciseSearchFragmentAdapter(Context context, ArrayList<Exercise> exercises) {
         super(context, 0, exercises);
+        this.context = context;
+        this.exercises = exercises;
     }
 
 
@@ -32,7 +34,7 @@ public class ExerciseSearchFragmentAdapter extends ArrayAdapter<Exercise> {
 
         if(rootView == null)
         {
-            LayoutInflater inflater = ((Activity)context).getLayoutInflater();
+            LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             rootView = inflater.inflate(R.layout.fragment_exercise_search_fragment_item,
                     parent, false);
 
