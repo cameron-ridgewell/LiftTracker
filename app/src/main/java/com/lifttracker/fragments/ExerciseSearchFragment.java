@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.ListView;
 
 import com.lifttracker.R;
 import com.lifttracker.common.Exercise;
+import com.lifttracker.elements.ExerciseSearchFragmentAdapter;
 import com.lifttracker.utilities.ResponseAction;
 import com.lifttracker.utilities.ServerRequest;
 
@@ -77,6 +79,8 @@ public class ExerciseSearchFragment extends Fragment {
                         }
 
                     });
+
+                    Log.e("Tag", exerciseList.get(0).getName());
                 }
             }
         });
@@ -90,10 +94,10 @@ public class ExerciseSearchFragment extends Fragment {
     {
         exercise_search = (EditText) findViewById(R.id.exercise_search);
         //TODO listener for change and search
-//        exercise_list_view = (ListView) findViewById(R.id.list_view);
-//        SimpleExerciseArrayAdapter itemsAdapter = new SimpleExerciseArrayAdapter(getContext(),
-//                exerciseList);
-//        exercise_list_view.setAdapter(itemsAdapter);
+        exercise_list_view = (ListView) findViewById(R.id.list_view);
+        ExerciseSearchFragmentAdapter itemsAdapter = new ExerciseSearchFragmentAdapter(getContext(),
+                exerciseList);
+        exercise_list_view.setAdapter(itemsAdapter);
 
     }
 

@@ -14,7 +14,8 @@
             android:padding="5dp"
             android:background="@drawable/search_bar_background">
             <!-- Editext for Search -->
-            <EditText android:id="@+id/exercise_search"
+            <EditText
+                android:id="@+id/exercise_search"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:hint="Search exercises.."
