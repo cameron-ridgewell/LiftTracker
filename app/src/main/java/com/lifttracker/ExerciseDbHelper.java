@@ -10,6 +10,7 @@ public class ExerciseDbHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + ExerciseDbContract.ExerciseEntry.TABLE_NAME + " (" +
                     ExerciseDbContract.ExerciseEntry._ID + " INTEGER PRIMARY KEY," +
+                    ExerciseDbContract.ExerciseEntry.COLUMN_EXERCISE_ID + TEXT_TYPE + COMMA_SEP +
                     ExerciseDbContract.ExerciseEntry.COLUMN_EXERCISE_NAME + TEXT_TYPE + COMMA_SEP +
                     ExerciseDbContract.ExerciseEntry.COLUMN_EXERCISE_TYPE + TEXT_TYPE + COMMA_SEP +
                     ExerciseDbContract.ExerciseEntry.COLUMN_LIFT_TYPE + TEXT_TYPE + COMMA_SEP +

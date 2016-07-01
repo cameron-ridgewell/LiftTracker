@@ -5,10 +5,7 @@ package com.lifttracker.common;
  */
 
 import com.google.gson.annotations.SerializedName;
-import com.lifttracker.common.Workout;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.joda.time.DateTime;
 
 public class Exercise {
     public enum LiftType {
@@ -24,12 +21,14 @@ public class Exercise {
     private String name_;
     private LiftType liftType_;
     private ExerciseType exerciseType_;
+    private String lastPerformed_;
 
     public Exercise(String name)
     {
         this.name_ = name;
         this.liftType_ = LiftType.None;
         this.exerciseType_ = ExerciseType.None;
+        this.lastPerformed_ = new DateTime(0).toString();
     }
 
     public String getName() {
@@ -62,5 +61,17 @@ public class Exercise {
 
     public void setId(String id_) {
         this.id_ = id_;
+    }
+
+    public DateTime getLastPerformedDate() {
+        return new DateTime(lastPerformed_);
+    }
+
+    public void setLastPerformedDate(DateTime lastPerformed_) {
+        this.lastPerformed_ = lastPerformed_.toString();
+    }
+
+    public void setLastPerformedDate(String lastPerformed_) {
+        this.lastPerformed_ = lastPerformed_;
     }
 }

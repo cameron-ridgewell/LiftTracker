@@ -78,7 +78,7 @@ public class ServerRequest {
 
             @Override
             public void onFailure(Call<E> call, Throwable t) {
-                Log.e("Error", t.getCause().toString());
+                Log.e("Error", failureText);
             }
         });
     }
@@ -88,7 +88,13 @@ public class ServerRequest {
         execute(call, new ResponseAction() {
             @Override
             public void action(Object input) {
-                if (((Response) input).code() < 400)
+                if (((Response) input).code() == 302)
+                {
+                    Toast.makeText(context, "Exercise "
+                                    + exercise.getName() + " Already Exists",
+                            Toast.LENGTH_SHORT).show();
+                }
+                else if (((Response) input).code() < 400)
                 {
                     Toast.makeText(context, "Exercise "
                             + exercise.getName() + " Added",

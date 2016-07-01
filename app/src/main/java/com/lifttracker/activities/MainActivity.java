@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,7 +19,16 @@ import com.lifttracker.fragments.CreateExerciseDialog;
 import com.lifttracker.fragments.MainPageViewFragment;
 import com.lifttracker.R;
 import com.lifttracker.common.Exercise;
+import com.lifttracker.utilities.MemoryRequisition;
+import com.lifttracker.utilities.ResponseAction;
 import com.lifttracker.utilities.ServerRequest;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -61,7 +71,7 @@ public class MainActivity extends AppCompatActivity
                 .addToBackStack(MAIN_PAGE_VIEW_FRAGMENT)
                 .commit();
 
-        //generateExercises();
+        generateExercises();
 
         /*
          * TODO:
@@ -77,7 +87,7 @@ public class MainActivity extends AppCompatActivity
     private void generateExercises()
     {
         ServerRequest svc = ServerRequest.getInstance();
-        Exercise exercise = new Exercise("Barbell Bench Press");
+        final Exercise exercise = new Exercise("Barbell Bench Press");
         exercise.setExerciseType(Exercise.ExerciseType.Weightlifting);
         exercise.setLiftType(Exercise.LiftType.Chest);
         svc.addExercise(exercise, getApplicationContext());
@@ -111,6 +121,32 @@ public class MainActivity extends AppCompatActivity
         svc.addExercise(exercise, getApplicationContext());
         exercise.setName("Decline Push-Up");
         svc.addExercise(exercise, getApplicationContext());
+
+        svc.getAllExercises(new ResponseAction() {
+            @Override
+            public void action(Object input) {
+                if (((Response) input).code() < 400)
+                {
+                    ArrayList<Exercise> exerciseList = new ArrayList<Exercise>();
+                    exerciseList.addAll(((Response<List<Exercise>>) input).body());
+                    Collections.sort(exerciseList, new Comparator<Exercise>() {
+                        @Override public int compare(Exercise e1, Exercise e2) {
+                            return e1.getName().compareTo(e2.getName()); // Ascending
+                        }
+
+                    });
+
+                    for (Exercise e : exerciseList)
+                    {
+                        MemoryRequisition.getInstance(getApplicationContext())
+                                .addExerciseDbItem(e, e.getLastPerformedDate());
+                        Exercise exercise1 = MemoryRequisition.getInstance(getApplicationContext())
+                                .getExerciseDbItem(e.getName());
+                        Log.e(exercise1.getName(), exercise1.getId());
+                    }
+                }
+            }
+        });
     }
 
     @Override

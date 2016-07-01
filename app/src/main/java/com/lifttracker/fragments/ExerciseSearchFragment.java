@@ -69,31 +69,32 @@ public class ExerciseSearchFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_exercise_search, container, false);
-        svc.getAllExercises(new ResponseAction() {
-            @Override
-            public void action(Object input) {
-                if (((Response) input).code() < 400)
-                {
-                    exerciseList.clear();
-                    exerciseList.addAll(((Response<List<Exercise>>) input).body());
-                    Collections.sort(exerciseList, new Comparator<Exercise>() {
-                        @Override public int compare(Exercise e1, Exercise e2) {
-                            return e1.getName().compareTo(e2.getName()); // Ascending
-                        }
+//        svc.getAllExercises(new ResponseAction() {
+//            @Override
+//            public void action(Object input) {
+//                if (((Response) input).code() < 400)
+//                {
+//                    exerciseList.clear();
+//                    exerciseList.addAll(((Response<List<Exercise>>) input).body());
+//                    Collections.sort(exerciseList, new Comparator<Exercise>() {
+//                        @Override public int compare(Exercise e1, Exercise e2) {
+//                            return e1.getName().compareTo(e2.getName()); // Ascending
+//                        }
+//
+//                    });
+//
+////                    for (Exercise e : exerciseList)
+////                    {
+////                        MemoryRequisition.getInstance(getContext())
+////                                .addExerciseDbItem(e, new DateTime());
+////                    }
+//
+//                    Log.e("Tag", MemoryRequisition.getInstance(getContext())
+//                            .getExerciseDbItem(exerciseList.get(0).getName()).getName());
+//                }
+//            }
+//        });
 
-                    });
-
-//                    for (Exercise e : exerciseList)
-//                    {
-//                        MemoryRequisition.getInstance(getContext())
-//                                .addExerciseDbItem(e, new DateTime());
-//                    }
-
-                    Log.e("Tag", MemoryRequisition.getInstance(getContext())
-                            .getExerciseDbItem(exerciseList.get(0).getName()).getName());
-                }
-            }
-        });
 
         setupView();
 
