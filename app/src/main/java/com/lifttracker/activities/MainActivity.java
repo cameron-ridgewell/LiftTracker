@@ -19,6 +19,7 @@ import com.lifttracker.fragments.CreateExerciseDialog;
 import com.lifttracker.fragments.MainPageViewFragment;
 import com.lifttracker.R;
 import com.lifttracker.common.Exercise;
+import com.lifttracker.fragments.TrackPersonalStatsFragment;
 import com.lifttracker.utilities.MemoryRequisition;
 import com.lifttracker.utilities.ResponseAction;
 import com.lifttracker.utilities.ServerRequest;
@@ -36,7 +37,8 @@ public class MainActivity extends AppCompatActivity
     private Toolbar toolbar;
 
     private final String MAIN_PAGE_VIEW_FRAGMENT = "main_page_view_fragment";
-    private final String CREATE_EXERCISE_FRAGMENT = "main_page_view_fragment";
+    private final String CREATE_EXERCISE_FRAGMENT = "create_exercise_fragment";
+    private final String TRACK_PERSONAL_STAT_FRAGMENT = "track_personal_stats_fragment";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +73,7 @@ public class MainActivity extends AppCompatActivity
                 .addToBackStack(MAIN_PAGE_VIEW_FRAGMENT)
                 .commit();
 
-        generateExercises();
+        //generateExercises();
 
         /*
          * TODO:
@@ -121,32 +123,32 @@ public class MainActivity extends AppCompatActivity
         svc.addExercise(exercise, getApplicationContext());
         exercise.setName("Decline Push-Up");
         svc.addExercise(exercise, getApplicationContext());
-
-        svc.getAllExercises(new ResponseAction() {
-            @Override
-            public void action(Object input) {
-                if (((Response) input).code() < 400)
-                {
-                    ArrayList<Exercise> exerciseList = new ArrayList<Exercise>();
-                    exerciseList.addAll(((Response<List<Exercise>>) input).body());
-                    Collections.sort(exerciseList, new Comparator<Exercise>() {
-                        @Override public int compare(Exercise e1, Exercise e2) {
-                            return e1.getName().compareTo(e2.getName()); // Ascending
-                        }
-
-                    });
-
-                    for (Exercise e : exerciseList)
-                    {
-                        MemoryRequisition.getInstance(getApplicationContext())
-                                .addExerciseDbItem(e, e.getLastPerformedDate());
-                        Exercise exercise1 = MemoryRequisition.getInstance(getApplicationContext())
-                                .getExerciseDbItem(e.getName());
-                        Log.e(exercise1.getName(), exercise1.getId());
-                    }
-                }
-            }
-        });
+//
+//        svc.getAllExercises(new ResponseAction() {
+//            @Override
+//            public void action(Object input) {
+//                if (((Response) input).code() < 400)
+//                {
+//                    ArrayList<Exercise> exerciseList = new ArrayList<Exercise>();
+//                    exerciseList.addAll(((Response<List<Exercise>>) input).body());
+//                    Collections.sort(exerciseList, new Comparator<Exercise>() {
+//                        @Override public int compare(Exercise e1, Exercise e2) {
+//                            return e1.getName().compareTo(e2.getName()); // Ascending
+//                        }
+//
+//                    });
+//
+//                    for (Exercise e : exerciseList)
+//                    {
+//                        MemoryRequisition.getInstance(getApplicationContext())
+//                                .addExerciseDbItem(e, e.getLastPerformedDate());
+//                        Exercise exercise1 = MemoryRequisition.getInstance(getApplicationContext())
+//                                .getExerciseDbItem(e.getName());
+//                        Log.e(exercise1.getName(), exercise1.getId());
+//                    }
+//                }
+//            }
+//        });
     }
 
     @Override
@@ -189,17 +191,16 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.track_personal_stats) {
-
+            Fragment fragment = TrackPersonalStatsFragment.newInstance();
+            this.getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, fragment, TRACK_PERSONAL_STAT_FRAGMENT)
+                    .addToBackStack(TRACK_PERSONAL_STAT_FRAGMENT)
+                    .commit();
         } else if (id == R.id.track_performance_stats) {
 
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.create_exercise) {
-//            Fragment fragment = CreateExerciseDialog.newInstance();
-//            this.getSupportFragmentManager().beginTransaction()
-//                    .replace(R.id.fragment_container, fragment, CREATE_EXERCISE_FRAGMENT)
-//                    .addToBackStack(CREATE_EXERCISE_FRAGMENT)
-//                    .commit();
             CreateExerciseDialog createExerciseDialog = CreateExerciseDialog.newInstance();
             createExerciseDialog.show(getSupportFragmentManager(), CREATE_EXERCISE_FRAGMENT);
         }

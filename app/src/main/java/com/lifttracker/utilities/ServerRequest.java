@@ -21,8 +21,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Body;
+import retrofit2.http.GET;
+import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 import com.lifttracker.common.Exercise;
+import com.lifttracker.common.PersonalStat;
+
 import org.joda.time.DateTime;
 
 /**
@@ -106,6 +112,33 @@ public class ServerRequest {
 
     public void getAllExercises(final ResponseAction responseAction) {
         Call<List<Exercise>> call = svc.getAllExercises();
+        execute(call, responseAction);
+    }
+
+    public void addPersonalStat(final ResponseAction responseAction, PersonalStat personalStat)
+    {
+        DateTime temp = personalStat.getTime();
+        personalStat.setTime(new DateTime(temp.year().get(), temp.monthOfYear().get(),
+                temp.dayOfMonth().get(), 0, 0));
+        Call<RequestLibrary.HttpBinResponse> call = svc.addPersonalStat(personalStat);
+        execute(call, new ResponseAction() {
+            @Override
+            public void action(Object input) {
+                Log.e("Success", "Personal Stat Added");
+            }
+        }, "addPersonalStat Call failed");
+    }
+
+    public void getAllPersonalStats(final ResponseAction responseAction)
+    {
+        Call<List<PersonalStat>> call = svc.getPersonalStatByType("none");
+        execute(call, responseAction);
+    }
+
+    public void getPersonalStatByType(final ResponseAction responseAction,
+                                      PersonalStat.StatType type)
+    {
+        Call<List<PersonalStat>> call = svc.getPersonalStatByType(type.name());
         execute(call, responseAction);
     }
 }

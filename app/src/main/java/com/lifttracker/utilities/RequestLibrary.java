@@ -1,6 +1,7 @@
 package com.lifttracker.utilities;
 
 import com.lifttracker.common.Exercise;
+import com.lifttracker.common.PersonalStat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,4 +63,13 @@ public interface RequestLibrary {
 
     @GET("/exercise/?filter=none")
     public Call<List<Exercise>> getAllExercises();
+
+    @POST("/personalstat/")
+    public Call<HttpBinResponse> addPersonalStat(@Body PersonalStat personalStat);
+
+    @GET("/personalstat/?filter=none")
+    public Call<List<PersonalStat>> getAllPersonalStats();
+
+    @GET("/personalstat/?filter=type")
+    public Call<List<PersonalStat>> getPersonalStatByType(@Query("type") String type);
 }
