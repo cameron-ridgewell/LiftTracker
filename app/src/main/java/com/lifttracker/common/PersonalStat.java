@@ -24,6 +24,7 @@ public class PersonalStat {
         this.statType_ = statType;
         this.measurement_ = measurement;
         this.measurementUnit_ = measurementUnit;
+        this.timeLong_ = DateTime.now().getMillis();
     }
 
     public StatType getStatType() {
