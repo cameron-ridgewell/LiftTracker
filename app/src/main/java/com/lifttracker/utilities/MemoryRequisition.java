@@ -7,8 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import org.joda.time.DateTime;
-import com.lifttracker.ExerciseDbContract;
-import com.lifttracker.ExerciseDbHelper;
+
 import com.lifttracker.common.Exercise;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.lifttracker;
+package com.lifttracker.utilities;
 
 import android.provider.BaseColumns;
 
