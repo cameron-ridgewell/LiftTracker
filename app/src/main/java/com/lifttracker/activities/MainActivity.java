@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity
                 .addToBackStack(MAIN_PAGE_VIEW_FRAGMENT)
                 .commit();
 
-        //generateExercises();
+//        generateExercises();
 
         /*
          * TODO:
@@ -123,32 +123,29 @@ public class MainActivity extends AppCompatActivity
         svc.addExercise(exercise, getApplicationContext());
         exercise.setName("Decline Push-Up");
         svc.addExercise(exercise, getApplicationContext());
-//
-//        svc.getAllExercises(new ResponseAction() {
-//            @Override
-//            public void action(Object input) {
-//                if (((Response) input).code() < 400)
-//                {
-//                    ArrayList<Exercise> exerciseList = new ArrayList<Exercise>();
-//                    exerciseList.addAll(((Response<List<Exercise>>) input).body());
-//                    Collections.sort(exerciseList, new Comparator<Exercise>() {
-//                        @Override public int compare(Exercise e1, Exercise e2) {
-//                            return e1.getName().compareTo(e2.getName()); // Ascending
-//                        }
-//
-//                    });
-//
-//                    for (Exercise e : exerciseList)
-//                    {
-//                        MemoryRequisition.getInstance(getApplicationContext())
-//                                .addExerciseDbItem(e, e.getLastPerformedDate());
-//                        Exercise exercise1 = MemoryRequisition.getInstance(getApplicationContext())
-//                                .getExerciseDbItem(e.getName());
-//                        Log.e(exercise1.getName(), exercise1.getId());
-//                    }
-//                }
-//            }
-//        });
+
+        svc.getAllExercises(new ResponseAction<List<Exercise>>() {
+            @Override
+            public void action(List<Exercise> input) {
+                ArrayList<Exercise> exerciseList = new ArrayList<Exercise>();
+                exerciseList.addAll(input);
+                Collections.sort(exerciseList, new Comparator<Exercise>() {
+                    @Override public int compare(Exercise e1, Exercise e2) {
+                        return e1.getName().compareTo(e2.getName()); // Ascending
+                    }
+
+                });
+
+                for (Exercise e : exerciseList)
+                {
+                    MemoryRequisition.getInstance(getApplicationContext())
+                            .addExerciseDbItem(e, e.getLastPerformedDate());
+                    Exercise exercise1 = MemoryRequisition.getInstance(getApplicationContext())
+                            .getExerciseDbItem(e.getName());
+                    Log.e(exercise1.getName(), exercise1.getId());
+                }
+            }
+        });
     }
 
     @Override

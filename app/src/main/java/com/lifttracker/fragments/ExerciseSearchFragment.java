@@ -52,6 +52,7 @@ public class ExerciseSearchFragment extends Fragment {
     private View rootView;
     private ArrayList<Exercise> exerciseList = new ArrayList<>();
     private ArrayList<Exercise> viewableExercises = new ArrayList<>();
+    private ExerciseSearchFragmentAdapter itemsAdapter;
     private OnFragmentInteractionListener mListener;
 
     private EditText exercise_search;
@@ -81,28 +82,24 @@ public class ExerciseSearchFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_exercise_search, container, false);
-        svc.getAllExercises(new ResponseAction() {
-            @Override
-            public void action(Object input) {
-                if (((Response) input).code() < 400)
-                {
-                    exerciseList.clear();
-                    exerciseList.addAll(((Response<List<Exercise>>) input).body());
-                    Collections.sort(exerciseList, new Comparator<Exercise>() {
-                        @Override public int compare(Exercise e1, Exercise e2) {
-                            return e1.getName().compareTo(e2.getName()); // Ascending
-                        }
-
-                    });
-
-                    for (Exercise e : exerciseList)
-                    {
-                        MemoryRequisition.getInstance(getContext())
-                                .addExerciseDbItem(e, new DateTime());
-                    }
-                }
-            }
-        });
+//        svc.getAllExercises(new ResponseAction<ArrayList<Exercise>>() {
+//            @Override
+//            public void action(ArrayList<Exercise> input) {
+//                exerciseList.clear();
+//                exerciseList.addAll(input);
+//                Collections.sort(exerciseList, new Comparator<Exercise>() {
+//                    @Override public int compare(Exercise e1, Exercise e2) {
+//                        return e1.getName().compareTo(e2.getName()); // Ascending
+//                    }
+//                });
+//
+//                for (Exercise e : exerciseList)
+//                {
+//                    MemoryRequisition.getInstance(getContext())
+//                            .addExerciseDbItem(e, new DateTime());
+//                }
+//            }
+//        });
 
 
         setupView();
@@ -118,11 +115,12 @@ public class ExerciseSearchFragment extends Fragment {
         viewableExercises.addAll(exerciseList);
 
         exercise_list_view = (ListView) findViewById(R.id.list_view);
-        final ExerciseSearchFragmentAdapter itemsAdapter = new ExerciseSearchFragmentAdapter(getContext(),
+        itemsAdapter = new ExerciseSearchFragmentAdapter(getContext(),
                 viewableExercises);
         exercise_list_view.setAdapter(itemsAdapter);
 
-        final StringMetric metric = StringMetrics.cosineSimilarity();
+        //final StringMetric metric = StringMetrics.cosineSimilarity();
+        final StringMetric metric = StringMetrics.damerauLevenshtein();
 
         exercise_search = (EditText) findViewById(R.id.exercise_search);
         exercise_search.addTextChangedListener(new TextWatcher() {
@@ -134,12 +132,23 @@ public class ExerciseSearchFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 viewableExercises.clear();
+                ArrayList<Exercise> secondaryList = new ArrayList<Exercise>();
                 if (!charSequence.toString().equals("")) {
                     for (Exercise e : exerciseList) {
-                        Log.e(charSequence.toString() + " " + e.getName(),metric.compare(charSequence.toString(), e.getName()) + "" );
-                        if (metric.compare(charSequence.toString(), e.getName()) > 0.0) {
-                            Log.e("Text", metric.compare(charSequence.toString(), e.getName()) + "");
+                        if (e.getName().toLowerCase().contains(charSequence.toString()
+                                .toLowerCase())) {
                             viewableExercises.add(e);
+                        }
+                        else
+                        {
+                            String str[] = e.getName().split(" ");
+                            for (int j = 0; j < str.length; j++) {
+                                if (metric.compare(charSequence.toString().toLowerCase(),
+                                        str[j]) > 0.3) {
+                                    secondaryList.add(e);
+                                    break;
+                                }
+                            }
                         }
                     }
                 }
@@ -147,6 +156,9 @@ public class ExerciseSearchFragment extends Fragment {
                 {
                     viewableExercises.addAll(exerciseList);
                 }
+
+                viewableExercises.addAll(secondaryList);
+
                 itemsAdapter.notifyDataSetChanged();
             }
 

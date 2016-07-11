@@ -54,24 +54,26 @@ public class MemoryRequisition {
 
     public void addExerciseDbItem(Exercise exercise, DateTime dateTime)
     {
-        ContentValues values = new ContentValues();
-        values.put(ExerciseDbContract.ExerciseEntry.COLUMN_EXERCISE_NAME,
-                exercise.getName());
-        values.put(ExerciseDbContract.ExerciseEntry.COLUMN_EXERCISE_ID,
-                exercise.getId());
-        values.put(ExerciseDbContract.ExerciseEntry.COLUMN_EXERCISE_TYPE,
-                exercise.getExerciseType().toString());
-        values.put(ExerciseDbContract.ExerciseEntry.COLUMN_LIFT_TYPE,
-                exercise.getLiftType().toString());
-        values.put(ExerciseDbContract.ExerciseEntry.COLUMN_DATE,
-                dateTime.toString());
+        if (getExerciseDbItem(exercise.getName()) == null) {
+            ContentValues values = new ContentValues();
+            values.put(ExerciseDbContract.ExerciseEntry.COLUMN_EXERCISE_NAME,
+                    exercise.getName());
+            values.put(ExerciseDbContract.ExerciseEntry.COLUMN_EXERCISE_ID,
+                    exercise.getId());
+            values.put(ExerciseDbContract.ExerciseEntry.COLUMN_EXERCISE_TYPE,
+                    exercise.getExerciseType().toString());
+            values.put(ExerciseDbContract.ExerciseEntry.COLUMN_LIFT_TYPE,
+                    exercise.getLiftType().toString());
+            values.put(ExerciseDbContract.ExerciseEntry.COLUMN_DATE,
+                    dateTime.toString());
 
-        // Insert the new row, returning the primary key value of the new row
-        long newRowId;
-        newRowId = db.insert(
-                ExerciseDbContract.ExerciseEntry.TABLE_NAME,
-                null,
-                values);
+            // Insert the new row, returning the primary key value of the new row
+            long newRowId;
+            newRowId = db.insert(
+                    ExerciseDbContract.ExerciseEntry.TABLE_NAME,
+                    null,
+                    values);
+        }
     }
 
     public Exercise getExerciseDbItem(String name_)

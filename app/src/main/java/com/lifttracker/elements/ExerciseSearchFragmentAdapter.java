@@ -32,17 +32,15 @@ public class ExerciseSearchFragmentAdapter extends ArrayAdapter<Exercise> {
     public View getView(int position, View convertView, ViewGroup parent) {
         rootView = convertView;
 
-        if(rootView == null)
-        {
-            LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-            rootView = inflater.inflate(R.layout.fragment_exercise_search_fragment_item,
-                    parent, false);
+        LayoutInflater inflater = ((Activity) context).getLayoutInflater();
+        rootView = inflater.inflate(R.layout.fragment_exercise_search_fragment_item,
+                parent, false);
 
-            TextView exercise_name = (TextView) findViewById(R.id.exercise_name);
-            exercise_name.setText(exercises.get(position).getName());
-            TextView exercise_name_alt_text = (TextView) findViewById(R.id.exercise_name_alt_text);
-            exercise_name_alt_text.setText(exercises.get(position).getName());
-        }
+        TextView exercise_name = (TextView) findViewById(R.id.exercise_name);
+        exercise_name.setText(exercises.get(position).getName());
+        TextView exercise_name_alt_text = (TextView) findViewById(R.id.exercise_name_alt_text);
+        exercise_name_alt_text.setText(exercises.get(position).getName());
+
         return rootView;
     }
 
