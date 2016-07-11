@@ -35,6 +35,8 @@ import com.lifttracker.utilities.simmetrics.metrics.StringMetrics;
 import com.lifttracker.utilities.simmetrics.simplifiers.Simplifiers;
 import com.lifttracker.utilities.simmetrics.tokenizers.Tokenizers;
 
+import org.joda.time.DateTime;
+
 import retrofit2.Response;
 
 /**
@@ -96,7 +98,7 @@ public class ExerciseSearchFragment extends Fragment {
                     for (Exercise e : exerciseList)
                     {
                         MemoryRequisition.getInstance(getContext())
-                                .addExerciseDbItem(e);
+                                .addExerciseDbItem(e, new DateTime());
                     }
                 }
             }

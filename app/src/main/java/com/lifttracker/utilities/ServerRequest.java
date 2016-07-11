@@ -10,6 +10,7 @@ import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -21,8 +22,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Body;
+import retrofit2.http.GET;
+import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 import com.lifttracker.common.Exercise;
+import com.lifttracker.common.PersonalStat;
+
 import org.joda.time.DateTime;
 
 /**
@@ -52,12 +59,20 @@ public class ServerRequest {
         }
     }
 
-    private static < E > void execute(Call<E> call, final ResponseAction responseAction)
+    private static < E, S > void execute(Call<E> call, final ResponseAction<S> responseAction)
     {
         call.enqueue(new Callback<E>() {
             @Override
             public void onResponse(Call<E> call, Response<E> response) {
-                responseAction.action(response);
+                if (response.code() < 400)
+                {
+                    Log.v("Response", "" + response.code());
+                    responseAction.action((S) response.body());
+                }
+                else
+                {
+                    Log.e("Error", "Invalid response -- " + response.code());
+                }
             }
 
             @Override
@@ -67,13 +82,21 @@ public class ServerRequest {
         });
     }
 
-    private static < E > void execute(Call<E> serverCall, final ResponseAction responseAction,
+    private static < E, S > void execute(Call<E> serverCall, final ResponseAction<S> responseAction,
                                       final String failureText)
     {
         serverCall.enqueue(new Callback<E>() {
             @Override
             public void onResponse(Call<E> call, Response<E> response) {
-                responseAction.action(response);
+                if (response.code() < 400)
+                {
+                    Log.v("Response", "" + response.code());
+                    responseAction.action((S) response.body());
+                }
+                else
+                {
+                    Log.e("Error", "Invalid response -- " + response.code());
+                }
             }
 
             @Override
@@ -85,27 +108,44 @@ public class ServerRequest {
 
     public void addExercise(final Exercise exercise, final Context context) {
         Call<RequestLibrary.HttpBinResponse> call = svc.addExercise(exercise);
-        execute(call, new ResponseAction() {
+        execute(call, new ResponseAction<Object>() {
             @Override
             public void action(Object input) {
-                if (((Response) input).code() == 302)
-                {
-                    Toast.makeText(context, "Exercise "
-                                    + exercise.getName() + " Already Exists",
-                            Toast.LENGTH_SHORT).show();
-                }
-                else if (((Response) input).code() < 400)
-                {
-                    Toast.makeText(context, "Exercise "
-                            + exercise.getName() + " Added",
-                            Toast.LENGTH_SHORT).show();
-                }
+                Toast.makeText(context, "Exercise "
+                        + exercise.getName() + " Added",
+                        Toast.LENGTH_SHORT).show();
             }
         }, "addExercise Call failed");
     }
 
     public void getAllExercises(final ResponseAction responseAction) {
         Call<List<Exercise>> call = svc.getAllExercises();
+        execute(call, responseAction);
+    }
+
+    public void addPersonalStat(PersonalStat personalStat)
+    {
+        DateTime temp = personalStat.getTime();
+        personalStat.setTime(new DateTime(temp.year().get(), temp.monthOfYear().get(),
+                temp.dayOfMonth().get(), 0, 0));
+        Call<RequestLibrary.HttpBinResponse> call = svc.addPersonalStat(personalStat);
+        execute(call, new ResponseAction<Object>() {
+            @Override
+            public void action(Object input) {
+            }
+        }, "addPersonalStat Call failed");
+    }
+
+    public void getAllPersonalStats(final ResponseAction responseAction)
+    {
+        Call<List<PersonalStat>> call = svc.getPersonalStatByType("none");
+        execute(call, responseAction);
+    }
+
+    public void getPersonalStatByType(final ResponseAction responseAction,
+                                      PersonalStat.StatType type)
+    {
+        Call<List<PersonalStat>> call = svc.getPersonalStatByType(type.name());
         execute(call, responseAction);
     }
 }

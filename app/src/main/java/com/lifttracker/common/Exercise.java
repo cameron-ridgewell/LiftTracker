@@ -21,14 +21,14 @@ public class Exercise {
     private String name_;
     private LiftType liftType_;
     private ExerciseType exerciseType_;
-    private String lastPerformed_;
+    private long timeLong_;
 
     public Exercise(String name)
     {
         this.name_ = name;
         this.liftType_ = LiftType.None;
         this.exerciseType_ = ExerciseType.None;
-        this.lastPerformed_ = new DateTime(0).toString();
+        this.timeLong_ = new DateTime(0).getMillis();
     }
 
     public String getName() {
@@ -64,14 +64,18 @@ public class Exercise {
     }
 
     public DateTime getLastPerformedDate() {
-        return new DateTime(lastPerformed_);
+        return new DateTime(this.timeLong_);
     }
 
     public void setLastPerformedDate(DateTime lastPerformed_) {
-        this.lastPerformed_ = lastPerformed_.toString();
+        this.timeLong_ = lastPerformed_.getMillis();
     }
 
-    public void setLastPerformedDate(String lastPerformed_) {
-        this.lastPerformed_ = lastPerformed_;
+    public long getTimeLong() {
+        return timeLong_;
+    }
+
+    public void setTimeLong(long timeLong) {
+        this.timeLong_ = timeLong;
     }
 }

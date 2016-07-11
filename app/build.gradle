@@ -31,4 +31,5 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
     compile 'com.google.guava:guava:19.0'
     compile 'commons-codec:commons-codec:+'
+    compile 'com.github.lecho:hellocharts-library:1.5.8@aar'
 }
