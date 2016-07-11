@@ -4,6 +4,8 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,15 +20,22 @@ import com.lifttracker.utilities.MemoryRequisition;
 import com.lifttracker.utilities.ResponseAction;
 import com.lifttracker.utilities.ServerRequest;
 
-import org.joda.time.DateTime;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
+
+import com.lifttracker.utilities.simmetrics.StringDistance;
+import com.lifttracker.utilities.simmetrics.StringMetric;
+import com.lifttracker.utilities.simmetrics.builders.StringMetricBuilder;
+import com.lifttracker.utilities.simmetrics.metrics.CosineSimilarity;
+import com.lifttracker.utilities.simmetrics.metrics.Levenshtein;
+import com.lifttracker.utilities.simmetrics.metrics.StringMetrics;
+import com.lifttracker.utilities.simmetrics.simplifiers.Simplifiers;
+import com.lifttracker.utilities.simmetrics.tokenizers.Tokenizers;
 
 import retrofit2.Response;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,6 +49,7 @@ public class ExerciseSearchFragment extends Fragment {
     private ServerRequest svc;
     private View rootView;
     private ArrayList<Exercise> exerciseList = new ArrayList<>();
+    private ArrayList<Exercise> viewableExercises = new ArrayList<>();
     private OnFragmentInteractionListener mListener;
 
     private EditText exercise_search;
@@ -69,31 +79,28 @@ public class ExerciseSearchFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_exercise_search, container, false);
-//        svc.getAllExercises(new ResponseAction() {
-//            @Override
-//            public void action(Object input) {
-//                if (((Response) input).code() < 400)
-//                {
-//                    exerciseList.clear();
-//                    exerciseList.addAll(((Response<List<Exercise>>) input).body());
-//                    Collections.sort(exerciseList, new Comparator<Exercise>() {
-//                        @Override public int compare(Exercise e1, Exercise e2) {
-//                            return e1.getName().compareTo(e2.getName()); // Ascending
-//                        }
-//
-//                    });
-//
-////                    for (Exercise e : exerciseList)
-////                    {
-////                        MemoryRequisition.getInstance(getContext())
-////                                .addExerciseDbItem(e, new DateTime());
-////                    }
-//
-//                    Log.e("Tag", MemoryRequisition.getInstance(getContext())
-//                            .getExerciseDbItem(exerciseList.get(0).getName()).getName());
-//                }
-//            }
-//        });
+        svc.getAllExercises(new ResponseAction() {
+            @Override
+            public void action(Object input) {
+                if (((Response) input).code() < 400)
+                {
+                    exerciseList.clear();
+                    exerciseList.addAll(((Response<List<Exercise>>) input).body());
+                    Collections.sort(exerciseList, new Comparator<Exercise>() {
+                        @Override public int compare(Exercise e1, Exercise e2) {
+                            return e1.getName().compareTo(e2.getName()); // Ascending
+                        }
+
+                    });
+
+                    for (Exercise e : exerciseList)
+                    {
+                        MemoryRequisition.getInstance(getContext())
+                                .addExerciseDbItem(e);
+                    }
+                }
+            }
+        });
 
 
         setupView();
@@ -103,13 +110,49 @@ public class ExerciseSearchFragment extends Fragment {
 
     private void setupView()
     {
-        exercise_search = (EditText) findViewById(R.id.exercise_search);
-        //TODO listener for change and search
+        exerciseList.clear();
+        exerciseList.addAll(MemoryRequisition.getInstance(getContext()).getAllExercises());
+        viewableExercises.clear();
+        viewableExercises.addAll(exerciseList);
+
         exercise_list_view = (ListView) findViewById(R.id.list_view);
-        ExerciseSearchFragmentAdapter itemsAdapter = new ExerciseSearchFragmentAdapter(getContext(),
-                exerciseList);
+        final ExerciseSearchFragmentAdapter itemsAdapter = new ExerciseSearchFragmentAdapter(getContext(),
+                viewableExercises);
         exercise_list_view.setAdapter(itemsAdapter);
 
+        final StringMetric metric = StringMetrics.cosineSimilarity();
+
+        exercise_search = (EditText) findViewById(R.id.exercise_search);
+        exercise_search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                viewableExercises.clear();
+                if (!charSequence.toString().equals("")) {
+                    for (Exercise e : exerciseList) {
+                        Log.e(charSequence.toString() + " " + e.getName(),metric.compare(charSequence.toString(), e.getName()) + "" );
+                        if (metric.compare(charSequence.toString(), e.getName()) > 0.0) {
+                            Log.e("Text", metric.compare(charSequence.toString(), e.getName()) + "");
+                            viewableExercises.add(e);
+                        }
+                    }
+                }
+                else
+                {
+                    viewableExercises.addAll(exerciseList);
+                }
+                itemsAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
     }
 
     public void onButtonPressed(Uri uri) {
