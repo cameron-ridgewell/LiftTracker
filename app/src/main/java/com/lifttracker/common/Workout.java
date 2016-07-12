@@ -12,23 +12,27 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 public class Workout {
-    private DateTime dateTime_;
+    private long timeLong_;
     private Exercise.LiftType LiftType_;
     private List<WorkoutItem> exercise_list_;
 
     public Workout(DateTime dateTime)
     {
-        this.dateTime_ = dateTime;
+        this.timeLong_ = dateTime.getMillis();
         this.LiftType_ = Exercise.LiftType.None;
         this.exercise_list_ = new ArrayList<>();
     }
 
-    public DateTime getDateTime() {
-        return dateTime_;
+    public DateTime getStartTime() {
+        return new DateTime(timeLong_);
     }
 
-    public void setDateTime(DateTime dateTime_) {
-        this.dateTime_ = dateTime_;
+    public void setStartTime(DateTime dateTime_) {
+        this.timeLong_ = dateTime_.getMillis();
+    }
+
+    public void setStartTime(long dateTime_) {
+        this.timeLong_ = dateTime_;
     }
 
     public Exercise.LiftType getLiftType() {

@@ -1,6 +1,7 @@
 package com.lifttracker.activities;
 
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -14,7 +15,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.FrameLayout;
 
+import com.lifttracker.elements.MovingFloatingActionButton;
 import com.lifttracker.fragments.CreateExerciseDialog;
 import com.lifttracker.fragments.MainPageViewFragment;
 import com.lifttracker.R;
@@ -29,8 +35,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import retrofit2.Response;
-
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -39,6 +43,10 @@ public class MainActivity extends AppCompatActivity
     private final String MAIN_PAGE_VIEW_FRAGMENT = "main_page_view_fragment";
     private final String CREATE_EXERCISE_FRAGMENT = "create_exercise_fragment";
     private final String TRACK_PERSONAL_STAT_FRAGMENT = "track_personal_stats_fragment";
+
+    private Button clickButton;
+    FloatingActionButton fab;
+    private boolean myToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +57,7 @@ public class MainActivity extends AppCompatActivity
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,6 +92,37 @@ public class MainActivity extends AppCompatActivity
          *      previous max lifts
          *      list of known exercises
          */
+        myToggle = false;
+        clickButton = (Button) findViewById(R.id.click_button);
+        clickButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myToggle = !myToggle;
+                Animation show_fab_1 = AnimationUtils.loadAnimation(getApplication(), R.anim.move_fab_bottom_to_top);
+                Animation hide_fab_1 = AnimationUtils.loadAnimation(getApplication(), R.anim.move_fab_top_to_bottom);
+                if (myToggle) {
+                    CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
+                    //layoutParams.rightMargin -= (int) (fab.getWidth() * 1.7);
+                    int tmp = layoutParams.topMargin;
+                    layoutParams.topMargin = layoutParams.bottomMargin;
+                    layoutParams.bottomMargin = tmp;
+                    fab.setLayoutParams(layoutParams);
+                    fab.startAnimation(hide_fab_1);
+                    fab.setClickable(true);
+                }
+                else
+                {
+                    CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
+                    //layoutParams.rightMargin += (int) (fab.getWidth() * 1.7);
+                    int tmp = layoutParams.topMargin;
+                    layoutParams.topMargin = layoutParams.bottomMargin;
+                    layoutParams.bottomMargin = tmp;
+                    fab.setLayoutParams(layoutParams);
+                    fab.startAnimation(show_fab_1);
+                    fab.setClickable(true);
+                }
+            }
+        });
     }
 
     private void generateExercises()

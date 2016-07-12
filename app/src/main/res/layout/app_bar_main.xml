@@ -7,7 +7,6 @@
     android:fitsSystemWindows="true"
     tools:context=".activities.MainActivity">
 
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -27,10 +26,17 @@
 
         </android.support.design.widget.AppBarLayout>
 
+        <Button
+            android:layout_below="@+id/toolbar_block"
+            android:id="@+id/click_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="clickMe"/>
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/toolbar_block">
+            android:layout_below="@+id/click_button">
             <include layout="@layout/content_main" />
         </FrameLayout>
 
@@ -43,6 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_dialog_email" />
+        android:src="@android:drawable/ic_dialog_email"
+        app:layout_behavior="com.lifttracker.elements.MovingFloatingActionButton"/>
 
 </android.support.design.widget.CoordinatorLayout>
