@@ -20,6 +20,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
+import com.lifttracker.elements.DynamicFAB;
 import com.lifttracker.elements.MovingFloatingActionButton;
 import com.lifttracker.fragments.CreateExerciseDialog;
 import com.lifttracker.fragments.MainPageViewFragment;
@@ -45,8 +46,9 @@ public class MainActivity extends AppCompatActivity
     private final String TRACK_PERSONAL_STAT_FRAGMENT = "track_personal_stats_fragment";
 
     private Button clickButton;
-    FloatingActionButton fab;
+    private DynamicFAB fab;
     private boolean myToggle;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +59,21 @@ public class MainActivity extends AppCompatActivity
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+        myToggle = true;
+
+        fab = (DynamicFAB) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                myToggle = !myToggle;
+                if (myToggle)
+                {
+                    fab.moveToTop(getApplication());
+                }
+                else
+                {
+                    fab.moveToBottom(getApplication());
+                }
             }
         });
 
@@ -92,37 +103,6 @@ public class MainActivity extends AppCompatActivity
          *      previous max lifts
          *      list of known exercises
          */
-        myToggle = false;
-        clickButton = (Button) findViewById(R.id.click_button);
-        clickButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                myToggle = !myToggle;
-                Animation show_fab_1 = AnimationUtils.loadAnimation(getApplication(), R.anim.move_fab_bottom_to_top);
-                Animation hide_fab_1 = AnimationUtils.loadAnimation(getApplication(), R.anim.move_fab_top_to_bottom);
-                if (myToggle) {
-                    CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
-                    //layoutParams.rightMargin -= (int) (fab.getWidth() * 1.7);
-                    int tmp = layoutParams.topMargin;
-                    layoutParams.topMargin = layoutParams.bottomMargin;
-                    layoutParams.bottomMargin = tmp;
-                    fab.setLayoutParams(layoutParams);
-                    fab.startAnimation(hide_fab_1);
-                    fab.setClickable(true);
-                }
-                else
-                {
-                    CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
-                    //layoutParams.rightMargin += (int) (fab.getWidth() * 1.7);
-                    int tmp = layoutParams.topMargin;
-                    layoutParams.topMargin = layoutParams.bottomMargin;
-                    layoutParams.bottomMargin = tmp;
-                    fab.setLayoutParams(layoutParams);
-                    fab.startAnimation(show_fab_1);
-                    fab.setClickable(true);
-                }
-            }
-        });
     }
 
     private void generateExercises()
