@@ -7,6 +7,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:background="@drawable/search_bar_background">
+            <!-- Editext for Search -->
+            <TextView
+                android:padding="5dp"
+                android:id="@+id/workout_label"
+                android:text="Text here"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/alt_text_light"
+                android:textColorHint="@color/alt_text_light"/>
+        </RelativeLayout>
+
+
         <!-- List View -->
         <ListView
             android:id="@+id/list_view"

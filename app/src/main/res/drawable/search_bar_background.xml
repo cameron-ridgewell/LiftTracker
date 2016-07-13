@@ -5,6 +5,5 @@
         android:top="1dp"
         android:right="1dp"
         android:bottom="1dp" />
-    <corners android:radius="2dp" />
     <solid android:color="@color/search_bar_background" />
 </shape>

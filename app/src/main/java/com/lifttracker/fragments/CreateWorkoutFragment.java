@@ -107,10 +107,6 @@ public class CreateWorkoutFragment extends Fragment {
         ResponseAction ra = new ResponseAction<Integer>() {
             @Override
             public void action(Integer o) {
-//                Fragment fragment = MainPageViewFragment.newInstance();
-//                ((FABInteractionActivity) getActivity())
-//                        .transitionFragment(R.id.fragment_container, fragment,
-//                                MainActivity.MAIN_PAGE_VIEW_FRAGMENT);
             ExerciseSearchDialog exerciseSearchDialog = ExerciseSearchDialog.newInstance();
             exerciseSearchDialog.show(getActivity().getSupportFragmentManager(),
                     MainActivity.EXERCISE_SEARCH_DIALOG);
