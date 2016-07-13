@@ -56,7 +56,6 @@ public class CreateWorkoutFragment extends Fragment {
     private ServerRequest svc;
     private View rootView;
     private ArrayList<Exercise> exerciseList = new ArrayList<>();
-    private ArrayList<Exercise> viewableExercises = new ArrayList<>();
     private ExerciseSearchFragmentAdapter itemsAdapter;
     private OnFragmentInteractionListener mListener;
 
@@ -97,7 +96,10 @@ public class CreateWorkoutFragment extends Fragment {
 
     private void setupView()
     {
-
+        exercise_list_view = (ListView) findViewById(R.id.list_view);
+        itemsAdapter = new ExerciseSearchFragmentAdapter(getContext(),
+                exerciseList);
+        exercise_list_view.setAdapter(itemsAdapter);
     }
 
     private void setupFABActions()
@@ -112,6 +114,15 @@ public class CreateWorkoutFragment extends Fragment {
             ExerciseSearchDialog exerciseSearchDialog = ExerciseSearchDialog.newInstance();
             exerciseSearchDialog.show(getActivity().getSupportFragmentManager(),
                     MainActivity.EXERCISE_SEARCH_DIALOG);
+            ResponseAction<Exercise> itemClickedAction = new ResponseAction<Exercise>() {
+                @Override
+                public void action(Exercise exercise) {
+                    exerciseList.add(exercise);
+                    Log.e("Item clicked", exercise.getName());
+                    itemsAdapter.notifyDataSetChanged();
+                }
+            };
+            exerciseSearchDialog.addClickedAction(itemClickedAction);
             }
         };
         ArrayList<ResponseAction> myArray = new ArrayList<ResponseAction>();

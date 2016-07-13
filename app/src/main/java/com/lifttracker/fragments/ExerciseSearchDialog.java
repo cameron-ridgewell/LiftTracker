@@ -16,6 +16,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -63,6 +64,8 @@ public class ExerciseSearchDialog extends DialogFragment {
 
     private EditText exercise_search;
     private ListView exercise_list_view;
+
+    private ResponseAction<Exercise> itemClickedResponse;
 
     public ExerciseSearchDialog() {
         // Required empty public constructor
@@ -174,6 +177,17 @@ public class ExerciseSearchDialog extends DialogFragment {
 
             }
         });
+
+        exercise_list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                if (itemClickedResponse != null)
+                {
+                    itemClickedResponse.action(viewableExercises.get(position));
+                }
+                dismiss();
+            }
+        });
     }
 
     public void onButtonPressed(Uri uri) {
@@ -211,5 +225,10 @@ public class ExerciseSearchDialog extends DialogFragment {
     private View findViewById(int id)
     {
         return rootView.findViewById(id);
+    }
+
+    public void addClickedAction(ResponseAction<Exercise> responseAction)
+    {
+        this.itemClickedResponse = responseAction;
     }
 }
