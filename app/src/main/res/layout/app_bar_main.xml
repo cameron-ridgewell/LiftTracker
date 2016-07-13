@@ -26,17 +26,9 @@
 
         </android.support.design.widget.AppBarLayout>
 
-        <Button
-            android:layout_below="@+id/toolbar_block"
-            android:id="@+id/click_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="clickMe"/>
-
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/click_button">
+            android:layout_height="wrap_content">
             <include layout="@layout/content_main" />
         </FrameLayout>
 

@@ -23,10 +23,12 @@ import android.widget.FrameLayout;
 import com.lifttracker.elements.DynamicFAB;
 import com.lifttracker.elements.MovingFloatingActionButton;
 import com.lifttracker.fragments.CreateExerciseDialog;
+import com.lifttracker.fragments.CreateWorkoutFragment;
 import com.lifttracker.fragments.MainPageViewFragment;
 import com.lifttracker.R;
 import com.lifttracker.common.Exercise;
 import com.lifttracker.fragments.TrackPersonalStatsFragment;
+import com.lifttracker.fragments.WorkoutFragment;
 import com.lifttracker.utilities.MemoryRequisition;
 import com.lifttracker.utilities.ResponseAction;
 import com.lifttracker.utilities.ServerRequest;
@@ -36,19 +38,22 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+import retrofit2.Response;
+
+public class MainActivity extends  FABInteractionActivity {
 
     private Toolbar toolbar;
 
-    private final String MAIN_PAGE_VIEW_FRAGMENT = "main_page_view_fragment";
-    private final String CREATE_EXERCISE_FRAGMENT = "create_exercise_fragment";
-    private final String TRACK_PERSONAL_STAT_FRAGMENT = "track_personal_stats_fragment";
+    public static  final String MAIN_PAGE_VIEW_FRAGMENT = "main_page_view_fragment";
+    public static final String CREATE_EXERCISE_FRAGMENT = "create_exercise_fragment";
+    public static final String CREATE_WORKOUT_FRAGMENT = "create_workout_fragment";
+    public static final String TRACK_PERSONAL_STAT_FRAGMENT = "track_personal_stats_fragment";
 
     private Button clickButton;
     private DynamicFAB fab;
     private boolean myToggle;
 
+    private ArrayList<ResponseAction> fabResponseActions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,24 +62,20 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Fragment fragment = MainPageViewFragment.newInstance();
+        this.getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment, MAIN_PAGE_VIEW_FRAGMENT)
+                .addToBackStack(MAIN_PAGE_VIEW_FRAGMENT)
+                .commit();
 
-        myToggle = false;
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         fab = (DynamicFAB) findViewById(R.id.fab);
         fab.setupMargin();
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                myToggle = !myToggle;
-                if (myToggle)
-                {
-                    fab.moveToTop(getApplication());
-                }
-                else
-                {
-                    fab.moveToHome(getApplication());
-                }
+                fabResponseActions.get(0).action(null);
             }
         });
 
@@ -86,12 +87,6 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        Fragment fragment = MainPageViewFragment.newInstance();
-        this.getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, fragment, MAIN_PAGE_VIEW_FRAGMENT)
-                .addToBackStack(MAIN_PAGE_VIEW_FRAGMENT)
-                .commit();
 
 //        generateExercises();
 
@@ -225,5 +220,41 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public FABInteractionActivity doAThing(ArrayList<ResponseAction> responseActions)
+    {
+        this.fabResponseActions = responseActions;
+        return this;
+    }
+
+    @Override
+    public FABInteractionActivity setupFragmentFAB(String fragment_name)
+    {
+        // Do Nothing
+        switch (fragment_name) {
+            case MAIN_PAGE_VIEW_FRAGMENT:
+                fab.moveToHome(getApplication());
+
+                break;
+            case CREATE_EXERCISE_FRAGMENT:
+                // Do Nothing
+                break;
+            case CREATE_WORKOUT_FRAGMENT:
+                fab.moveToTop(getApplication());
+                setFABBackAction(new ResponseAction<Object>() {
+                    @Override
+                    public void action(Object o) {
+                        fab.moveToHome(getApplication());
+                    }
+                });
+                break;
+            case TRACK_PERSONAL_STAT_FRAGMENT:
+                break;
+            default:
+                break;
+        }
+        return this;
     }
 }

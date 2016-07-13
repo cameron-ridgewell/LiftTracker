@@ -14,6 +14,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.lifttracker.R;
+import com.lifttracker.activities.FABInteractionActivity;
+import com.lifttracker.activities.MainActivity;
 import com.lifttracker.common.Exercise;
 import com.lifttracker.elements.ExerciseSearchFragmentAdapter;
 import com.lifttracker.utilities.MemoryRequisition;
@@ -75,6 +77,8 @@ public class CreateWorkoutFragment extends Fragment {
         if (getArguments() != null) {
         }
         svc = ServerRequest.getInstance();
+
+        setupFABActions();
     }
 
     @Override
@@ -93,6 +97,24 @@ public class CreateWorkoutFragment extends Fragment {
 
     }
 
+    private void setupFABActions()
+    {
+        ResponseAction ra = new ResponseAction<Integer>() {
+            @Override
+            public void action(Integer o) {
+                Fragment fragment = MainPageViewFragment.newInstance();
+                ((FABInteractionActivity) getActivity())
+                        .transitionFragment(R.id.fragment_container, fragment,
+                                MainActivity.MAIN_PAGE_VIEW_FRAGMENT);
+            }
+        };
+        ArrayList<ResponseAction> myArray = new ArrayList<ResponseAction>();
+        myArray.add(ra);
+
+        ((FABInteractionActivity) getActivity())
+                .doAThing(myArray);
+    }
+
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -108,6 +130,7 @@ public class CreateWorkoutFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        ((FABInteractionActivity) getActivity()).responseAction();
     }
 
     /**

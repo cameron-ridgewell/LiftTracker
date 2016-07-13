@@ -13,6 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lifttracker.R;
+import com.lifttracker.activities.FABInteractionActivity;
+import com.lifttracker.activities.MainActivity;
+import com.lifttracker.utilities.ResponseAction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +43,8 @@ public class MainPageViewFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
         }
+
+        setupFABActions();
     }
 
     @Override
@@ -55,6 +60,24 @@ public class MainPageViewFragment extends Fragment {
         tabLayout.setupWithViewPager(viewPager);
 
         return rootView;
+    }
+
+    private void setupFABActions()
+    {
+        ResponseAction ra = new ResponseAction<Integer>() {
+            @Override
+            public void action(Integer o) {
+                Fragment fragment = CreateWorkoutFragment.newInstance();
+                ((FABInteractionActivity) getActivity())
+                        .transitionFragment(R.id.fragment_container, fragment,
+                                MainActivity.CREATE_WORKOUT_FRAGMENT);
+            }
+        };
+        ArrayList<ResponseAction> myArray = new ArrayList<ResponseAction>();
+        myArray.add(ra);
+
+        ((FABInteractionActivity) getActivity())
+                .doAThing(myArray);
     }
 
     public void onButtonPressed(Uri uri) {
