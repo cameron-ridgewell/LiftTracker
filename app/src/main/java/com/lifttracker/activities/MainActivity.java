@@ -59,9 +59,10 @@ public class MainActivity extends AppCompatActivity
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        myToggle = true;
+        myToggle = false;
 
         fab = (DynamicFAB) findViewById(R.id.fab);
+        fab.setupMargin();
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 else
                 {
-                    fab.moveToBottom(getApplication());
+                    fab.moveToHome(getApplication());
                 }
             }
         });

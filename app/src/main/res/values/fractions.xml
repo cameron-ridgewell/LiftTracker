@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <item name="fab_vertical_percentage" type="fraction">-800%</item>
+
+</resources>

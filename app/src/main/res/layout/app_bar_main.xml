@@ -41,15 +41,17 @@
         </FrameLayout>
 
 
+        <com.lifttracker.elements.DynamicFAB
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:src="@android:drawable/ic_dialog_email"
+            app:layout_behavior="com.lifttracker.elements.MovingFloatingActionButton"/>
+
+
     </RelativeLayout>
 
-    <com.lifttracker.elements.DynamicFAB
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_dialog_email"
-        app:layout_behavior="com.lifttracker.elements.MovingFloatingActionButton"/>
 
 </android.support.design.widget.CoordinatorLayout>

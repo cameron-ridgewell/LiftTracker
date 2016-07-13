@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="fab_bounce_angle">5</integer>
+    <integer name="fab_bounce_angle_neg">-5</integer>
+
+    <integer name="fab_bounce_time">500</integer>
+    <integer name="fab_bounce_time_half">250</integer>
+</resources>
