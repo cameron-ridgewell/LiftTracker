@@ -7,9 +7,12 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -102,10 +105,13 @@ public class CreateWorkoutFragment extends Fragment {
         ResponseAction ra = new ResponseAction<Integer>() {
             @Override
             public void action(Integer o) {
-                Fragment fragment = MainPageViewFragment.newInstance();
-                ((FABInteractionActivity) getActivity())
-                        .transitionFragment(R.id.fragment_container, fragment,
-                                MainActivity.MAIN_PAGE_VIEW_FRAGMENT);
+//                Fragment fragment = MainPageViewFragment.newInstance();
+//                ((FABInteractionActivity) getActivity())
+//                        .transitionFragment(R.id.fragment_container, fragment,
+//                                MainActivity.MAIN_PAGE_VIEW_FRAGMENT);
+            ExerciseSearchDialog exerciseSearchDialog = ExerciseSearchDialog.newInstance();
+            exerciseSearchDialog.show(getActivity().getSupportFragmentManager(),
+                    MainActivity.EXERCISE_SEARCH_DIALOG);
             }
         };
         ArrayList<ResponseAction> myArray = new ArrayList<ResponseAction>();

@@ -48,6 +48,7 @@ public class MainActivity extends  FABInteractionActivity {
     public static final String CREATE_EXERCISE_FRAGMENT = "create_exercise_fragment";
     public static final String CREATE_WORKOUT_FRAGMENT = "create_workout_fragment";
     public static final String TRACK_PERSONAL_STAT_FRAGMENT = "track_personal_stats_fragment";
+    public static final String EXERCISE_SEARCH_DIALOG = "exercise_search_dialog";
 
     private Button clickButton;
     private DynamicFAB fab;
