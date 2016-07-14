@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,9 @@ public class MainPageViewFragment extends Fragment {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private View rootView;
+    private ViewPagerAdapter vpadapter;
+
+    private String myString = "hello";
 
     public final ResponseAction<Integer> fabClickAction = new ResponseAction<Integer>() {
         @Override
@@ -84,6 +88,17 @@ public class MainPageViewFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
     }
@@ -95,10 +110,11 @@ public class MainPageViewFragment extends Fragment {
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getFragmentManager());
-        adapter.addFragment(new WorkoutFragment(), "ONE");
-        adapter.addFragment(new ExerciseSearchFragment(), "TWO");
-        viewPager.setAdapter(adapter);
+        // Using ChildFragmentManager keeps the fragments from disappearing on back stack action
+        vpadapter = new ViewPagerAdapter(getChildFragmentManager());
+        vpadapter.addFragment(new WorkoutFragment(), "ONE");
+        vpadapter.addFragment(new ExerciseSearchFragment(), "TWO");
+        viewPager.setAdapter(vpadapter);
     }
 
     private View findViewById(int id)
