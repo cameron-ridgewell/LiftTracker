@@ -151,7 +151,6 @@ public class DynamicFAB extends FloatingActionButton{
                     layoutParams.rightMargin = (int) getResources()
                             .getDimension(R.dimen.fab_margin);
                     setLayoutParams(layoutParams);
-                    Log.e("BottomHome", layoutParams.bottomMargin + "");
                 }
 
                 @Override
