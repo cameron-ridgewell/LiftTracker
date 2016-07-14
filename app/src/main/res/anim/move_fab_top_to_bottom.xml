@@ -15,7 +15,7 @@
 
     <!--Move-->
     <translate
-        android:duration="600"
+        android:duration="@integer/fab_bounce_time"
         android:fromXDelta="0%"
         android:fromYDelta="@fraction/fab_vertical_percentage"
         android:interpolator="@android:anim/linear_interpolator"

@@ -63,13 +63,10 @@ public class MainActivity extends  FABInteractionActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Fragment fragment = MainPageViewFragment.newInstance();
-        this.getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, fragment, MAIN_PAGE_VIEW_FRAGMENT)
-                .addToBackStack(MAIN_PAGE_VIEW_FRAGMENT)
-                .commit();
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Fragment fragment = MainPageViewFragment.newInstance();
+        transitionFragment(R.id.fragment_container, fragment, MAIN_PAGE_VIEW_FRAGMENT);
 
         fab = (DynamicFAB) findViewById(R.id.fab);
         fab.setupMargin();
@@ -205,10 +202,8 @@ public class MainActivity extends  FABInteractionActivity {
 
         if (id == R.id.track_personal_stats) {
             Fragment fragment = TrackPersonalStatsFragment.newInstance();
-            this.getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, fragment, TRACK_PERSONAL_STAT_FRAGMENT)
-                    .addToBackStack(TRACK_PERSONAL_STAT_FRAGMENT)
-                    .commit();
+            transitionFragment(R.id.fragment_container, fragment, TRACK_PERSONAL_STAT_FRAGMENT);
+
         } else if (id == R.id.track_performance_stats) {
 
         } else if (id == R.id.nav_manage) {
@@ -224,7 +219,7 @@ public class MainActivity extends  FABInteractionActivity {
     }
 
     @Override
-    public FABInteractionActivity doAThing(ArrayList<ResponseAction> responseActions)
+    public FABInteractionActivity clickAction(ArrayList<ResponseAction> responseActions)
     {
         this.fabResponseActions = responseActions;
         return this;
@@ -233,23 +228,28 @@ public class MainActivity extends  FABInteractionActivity {
     @Override
     public FABInteractionActivity setupFragmentFAB(String fragment_name)
     {
-        // Do Nothing
+        ArrayList<ResponseAction> tmpArray = new ArrayList<>();
         switch (fragment_name) {
             case MAIN_PAGE_VIEW_FRAGMENT:
-                fab.moveToHome(getApplication());
-
+                try {
+                    fab.moveToHome(getApplication());
+                }
+                catch (NullPointerException exception)
+                {
+                    //Do thing because this happens when the app is booted
+                }
+                tmpArray.add(((MainPageViewFragment) getSupportFragmentManager()
+                        .findFragmentByTag(fragment_name)).fabClickAction);
+                clickAction(tmpArray);
                 break;
             case CREATE_EXERCISE_FRAGMENT:
                 // Do Nothing
                 break;
             case CREATE_WORKOUT_FRAGMENT:
                 fab.moveToTop(getApplication());
-                setFABBackAction(new ResponseAction<Object>() {
-                    @Override
-                    public void action(Object o) {
-                        fab.moveToHome(getApplication());
-                    }
-                });
+                tmpArray.add(((CreateWorkoutFragment) getSupportFragmentManager()
+                        .findFragmentByTag(fragment_name)).fabClickAction);
+                clickAction(tmpArray);
                 break;
             case TRACK_PERSONAL_STAT_FRAGMENT:
                 break;

@@ -16,9 +16,7 @@ import java.util.ArrayList;
 public abstract class FABInteractionActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private ResponseAction fabBackAction;
-
-    public FABInteractionActivity doAThing(ArrayList<ResponseAction> responseActions)
+    public FABInteractionActivity clickAction(ArrayList<ResponseAction> responseActions)
     {
         return this;
     }
@@ -31,22 +29,13 @@ public abstract class FABInteractionActivity extends AppCompatActivity
     public FABInteractionActivity transitionFragment(int fragment_container_id, Fragment fragment,
                                                      String fragment_string)
     {
-        setupFragmentFAB(fragment_string)
-                .getSupportFragmentManager().beginTransaction()
-                .replace(fragment_container_id, fragment,
-                        fragment_string)
-                .addToBackStack(fragment_string)
-                .commit();
+        getSupportFragmentManager().beginTransaction()
+        .replace(fragment_container_id, fragment,
+                fragment_string)
+        .addToBackStack(fragment_string)
+        .commit();
+        getSupportFragmentManager().executePendingTransactions();
+        setupFragmentFAB(fragment_string);
         return this;
-    }
-
-    public void setFABBackAction(ResponseAction<Object> ra)
-    {
-        fabBackAction = ra;
-    }
-
-    public void responseAction()
-    {
-        fabBackAction.action(null);
     }
 }

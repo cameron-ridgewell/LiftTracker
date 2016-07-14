@@ -1,8 +1,10 @@
 package com.lifttracker.fragments;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,8 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.lifttracker.R;
 import com.lifttracker.activities.FABInteractionActivity;
@@ -26,32 +30,11 @@ import com.lifttracker.utilities.ResponseAction;
 import com.lifttracker.utilities.ServerRequest;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
-
-import com.lifttracker.utilities.simmetrics.StringDistance;
-import com.lifttracker.utilities.simmetrics.StringMetric;
-import com.lifttracker.utilities.simmetrics.builders.StringMetricBuilder;
-import com.lifttracker.utilities.simmetrics.metrics.CosineSimilarity;
-import com.lifttracker.utilities.simmetrics.metrics.Levenshtein;
-import com.lifttracker.utilities.simmetrics.metrics.StringMetrics;
-import com.lifttracker.utilities.simmetrics.simplifiers.Simplifiers;
-import com.lifttracker.utilities.simmetrics.tokenizers.Tokenizers;
 
 import org.joda.time.DateTime;
 
-import retrofit2.Response;
+import mehdi.sakout.fancybuttons.FancyButton;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ExerciseSearchFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ExerciseSearchFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class CreateWorkoutFragment extends Fragment {
     private ServerRequest svc;
     private View rootView;
@@ -59,8 +42,25 @@ public class CreateWorkoutFragment extends Fragment {
     private ExerciseSearchFragmentAdapter itemsAdapter;
     private OnFragmentInteractionListener mListener;
 
-    private EditText exercise_search;
     private ListView exercise_list_view;
+    private FancyButton timerButton;
+
+    public final ResponseAction<Integer> fabClickAction = new ResponseAction<Integer>() {
+        @Override
+        public void action(Integer o) {
+            ExerciseSearchDialog exerciseSearchDialog = ExerciseSearchDialog.newInstance();
+            exerciseSearchDialog.show(getActivity().getSupportFragmentManager(),
+                    MainActivity.EXERCISE_SEARCH_DIALOG);
+            ResponseAction<Exercise> itemClickedAction = new ResponseAction<Exercise>() {
+                @Override
+                public void action(Exercise exercise) {
+                    exerciseList.add(exercise);
+                    itemsAdapter.notifyDataSetChanged();
+                }
+            };
+            exerciseSearchDialog.addClickedAction(itemClickedAction);
+        }
+    };
 
     public CreateWorkoutFragment() {
         // Required empty public constructor
@@ -100,32 +100,13 @@ public class CreateWorkoutFragment extends Fragment {
         itemsAdapter = new ExerciseSearchFragmentAdapter(getContext(),
                 exerciseList);
         exercise_list_view.setAdapter(itemsAdapter);
+        timerButton = (FancyButton) findViewById(R.id.timer_button);
     }
 
     private void setupFABActions()
     {
-        ResponseAction ra = new ResponseAction<Integer>() {
-            @Override
-            public void action(Integer o) {
-            ExerciseSearchDialog exerciseSearchDialog = ExerciseSearchDialog.newInstance();
-            exerciseSearchDialog.show(getActivity().getSupportFragmentManager(),
-                    MainActivity.EXERCISE_SEARCH_DIALOG);
-            ResponseAction<Exercise> itemClickedAction = new ResponseAction<Exercise>() {
-                @Override
-                public void action(Exercise exercise) {
-                    exerciseList.add(exercise);
-                    Log.e("Item clicked", exercise.getName());
-                    itemsAdapter.notifyDataSetChanged();
-                }
-            };
-            exerciseSearchDialog.addClickedAction(itemClickedAction);
-            }
-        };
         ArrayList<ResponseAction> myArray = new ArrayList<ResponseAction>();
-        myArray.add(ra);
-
-        ((FABInteractionActivity) getActivity())
-                .doAThing(myArray);
+        myArray.add(fabClickAction);
     }
 
     public void onButtonPressed(Uri uri) {
@@ -141,9 +122,10 @@ public class CreateWorkoutFragment extends Fragment {
 
     @Override
     public void onDetach() {
+        ((FABInteractionActivity) getActivity()).setupFragmentFAB(getFragmentManager().getBackStackEntryAt(getFragmentManager()
+                .getBackStackEntryCount() - 1).getName());
         super.onDetach();
         mListener = null;
-        ((FABInteractionActivity) getActivity()).responseAction();
     }
 
     /**

@@ -11,4 +11,6 @@
     <color name="search_bar_background">@color/colorPrimary</color>
     <color name="search_bar_background_interior">@color/colorPrimaryLight</color>
     <color name="alt_text_light">#FFFFFF</color>
+
+    <color name="primary_button_text_color">#FFFFFF</color>
 </resources>

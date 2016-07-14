@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <item name="fab_vertical_percentage" type="fraction">-845%</item>
-
+    <item name="fab_vertical_percentage" type="fraction">-875%</item>
+    <item name="fab_scale_percentage" type="fraction">80%</item>
 </resources>

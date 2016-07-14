@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import com.lifttracker.R;
 import com.lifttracker.activities.FABInteractionActivity;
 import com.lifttracker.activities.MainActivity;
+import com.lifttracker.common.Exercise;
 import com.lifttracker.utilities.ResponseAction;
 
 import java.util.ArrayList;
@@ -26,6 +27,16 @@ public class MainPageViewFragment extends Fragment {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private View rootView;
+
+    public final ResponseAction<Integer> fabClickAction = new ResponseAction<Integer>() {
+        @Override
+        public void action(Integer o) {
+            Fragment fragment = CreateWorkoutFragment.newInstance();
+            ((FABInteractionActivity) getActivity())
+                    .transitionFragment(R.id.fragment_container, fragment,
+                            MainActivity.CREATE_WORKOUT_FRAGMENT);
+        }
+    };
 
     public MainPageViewFragment() {
         // Required empty public constructor
@@ -64,20 +75,6 @@ public class MainPageViewFragment extends Fragment {
 
     private void setupFABActions()
     {
-        ResponseAction ra = new ResponseAction<Integer>() {
-            @Override
-            public void action(Integer o) {
-                Fragment fragment = CreateWorkoutFragment.newInstance();
-                ((FABInteractionActivity) getActivity())
-                        .transitionFragment(R.id.fragment_container, fragment,
-                                MainActivity.CREATE_WORKOUT_FRAGMENT);
-            }
-        };
-        ArrayList<ResponseAction> myArray = new ArrayList<ResponseAction>();
-        myArray.add(ra);
-
-        ((FABInteractionActivity) getActivity())
-                .doAThing(myArray);
     }
 
     public void onButtonPressed(Uri uri) {

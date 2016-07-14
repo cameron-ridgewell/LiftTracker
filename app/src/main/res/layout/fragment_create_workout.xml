@@ -2,7 +2,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -11,19 +12,34 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
+            android:orientation="horizontal"
             android:background="@drawable/search_bar_background">
             <!-- Editext for Search -->
             <TextView
                 android:padding="5dp"
                 android:id="@+id/workout_label"
                 android:text="Text here"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/alt_text_light"
                 android:textColorHint="@color/alt_text_light"/>
+
+            <com.lifttracker.elements.TimerButton
+                android:id="@+id/timer_button"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:padding="8dp"
+                app:fb_text="Timer | 00:00"
+                style="@style/timer_button"/>
         </RelativeLayout>
 
+        <Chronometer
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/chronometer"
+            android:visibility="gone"/>
 
         <!-- List View -->
         <ListView

@@ -42,4 +42,14 @@
 
     </style>
 
+    <style name="timer_button">
+        <item name="fb_defaultColor">@color/colorAccent</item>
+        <item name="fb_focusColor">@color/colorAccentDark</item>
+        <item name="fb_radius">20dp</item>
+        <item name="fb_text">TV Power</item>
+        <item name="fb_textSize">@dimen/primary_button_text_size</item>
+        <item name="fb_textColor">@color/primary_button_text_color</item>
+    </style>
+
+
 </resources>
