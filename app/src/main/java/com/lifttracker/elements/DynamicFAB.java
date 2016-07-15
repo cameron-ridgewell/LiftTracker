@@ -1,5 +1,6 @@
 package com.lifttracker.elements;
 
+import android.animation.Animator;
 import android.app.Application;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.widget.RelativeLayout;
 
 import com.lifttracker.R;
@@ -52,27 +54,6 @@ public class DynamicFAB extends FloatingActionButton{
         try {
             Animation moveFABtoTop =
                     AnimationUtils.loadAnimation(application, R.anim.move_fab_bottom_to_top);
-            final Animation residRotation =
-                    AnimationUtils.loadAnimation(application, R.anim.fab_resid_rotation);
-            residRotation.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    final Animation residRotationRestore =
-                            AnimationUtils.loadAnimation(application,
-                                    R.anim.restore_fab_from_resid);
-                    startAnimation(residRotationRestore);
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
-            });
             moveFABtoTop.setAnimationListener(new Animation.AnimationListener() {
                 @Override
                 public void onAnimationStart(Animation animation) {
@@ -92,7 +73,7 @@ public class DynamicFAB extends FloatingActionButton{
                     clearAnimation();
 
                     setClickable(true);
-                    startAnimation(residRotation);
+                    startAnimation(rotateAndRestore(application));
                 }
 
                 @Override
@@ -108,7 +89,13 @@ public class DynamicFAB extends FloatingActionButton{
             Log.e("Error in toTopanimation", e.getMessage());
         }
     }
-
+//    {
+//        animate()
+//                .setInterpolator(new LinearInterpolator())
+//                .setDuration(getResources().getInteger(R.integer.fab_bounce_time))
+//                .translationY(-1600)
+//                .rotationBy(10);
+//    }
     public void moveToHome(final Application application)
     {
         try
@@ -170,5 +157,31 @@ public class DynamicFAB extends FloatingActionButton{
         {
             Log.e("Error in toBotanimation", e.getMessage());
         }
+    }
+
+    private Animation rotateAndRestore(final Application application)
+    {
+        final Animation residRotation =
+                AnimationUtils.loadAnimation(application, R.anim.fab_resid_rotation);
+        residRotation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                final Animation residRotationRestore =
+                        AnimationUtils.loadAnimation(application,
+                                R.anim.restore_fab_from_resid);
+                startAnimation(residRotationRestore);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        return residRotation;
     }
 }

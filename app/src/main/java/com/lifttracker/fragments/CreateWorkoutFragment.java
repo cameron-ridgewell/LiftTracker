@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -24,6 +26,8 @@ import com.lifttracker.R;
 import com.lifttracker.activities.FABInteractionActivity;
 import com.lifttracker.activities.MainActivity;
 import com.lifttracker.common.Exercise;
+import com.lifttracker.common.SuperSetExerciseList;
+import com.lifttracker.elements.CreateWorkoutListAdapter;
 import com.lifttracker.elements.ExerciseSearchFragmentAdapter;
 import com.lifttracker.utilities.MemoryRequisition;
 import com.lifttracker.utilities.ResponseAction;
@@ -38,11 +42,11 @@ import mehdi.sakout.fancybuttons.FancyButton;
 public class CreateWorkoutFragment extends Fragment {
     private ServerRequest svc;
     private View rootView;
-    private ArrayList<Exercise> exerciseList = new ArrayList<>();
-    private ExerciseSearchFragmentAdapter itemsAdapter;
+    private SuperSetExerciseList exerciseList = new SuperSetExerciseList();
+    private CreateWorkoutListAdapter itemsAdapter;
     private OnFragmentInteractionListener mListener;
 
-    private ListView exercise_list_view;
+    private RecyclerView exercise_list_view;
     private FancyButton timerButton;
 
     public final ResponseAction<Integer> fabClickAction = new ResponseAction<Integer>() {
@@ -55,6 +59,7 @@ public class CreateWorkoutFragment extends Fragment {
                 @Override
                 public void action(Exercise exercise) {
                     exerciseList.add(exercise);
+                    //itemsAdapter.notifyItemInserted(itemsAdapter.getItemCount()-1);
                     itemsAdapter.notifyDataSetChanged();
                 }
             };
@@ -66,7 +71,20 @@ public class CreateWorkoutFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static CreateWorkoutFragment newInstance() {
+//    private class ReceiverThread extends Thread {
+//        @Override
+//        public void run() {
+//            Activity_name.this.runOnUiThread(new Runnable() {
+//
+//                @Override
+//                public void run() {
+//                    mAdapter.notifyDataSetChanged();
+//                }
+//            });
+//        }
+
+
+        public static CreateWorkoutFragment newInstance() {
         CreateWorkoutFragment fragment = new CreateWorkoutFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -96,10 +114,12 @@ public class CreateWorkoutFragment extends Fragment {
 
     private void setupView()
     {
-        exercise_list_view = (ListView) findViewById(R.id.list_view);
-        itemsAdapter = new ExerciseSearchFragmentAdapter(getContext(),
+        exerciseList.add(new Exercise("Exercise Name"));
+        exercise_list_view = (RecyclerView) findViewById(R.id.list_view);
+        itemsAdapter = new CreateWorkoutListAdapter(getContext(),
                 exerciseList);
         exercise_list_view.setAdapter(itemsAdapter);
+        exercise_list_view.setLayoutManager(new LinearLayoutManager(getContext()));
         timerButton = (FancyButton) findViewById(R.id.timer_button);
     }
 

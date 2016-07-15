@@ -1,5 +1,6 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/create_workout_exercise_item"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".elements.ExerciseSearchFragmentAdapter">
@@ -26,4 +27,4 @@
             style="@style/set_info_list_text"/>
     </LinearLayout>
 
-</FrameLayout>
+</LinearLayout>
