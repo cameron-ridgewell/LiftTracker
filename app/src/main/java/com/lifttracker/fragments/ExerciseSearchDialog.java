@@ -11,7 +11,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,23 +27,9 @@ import com.lifttracker.utilities.ResponseAction;
 import com.lifttracker.utilities.ServerRequest;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
 
-import com.lifttracker.utilities.simmetrics.StringDistance;
 import com.lifttracker.utilities.simmetrics.StringMetric;
-import com.lifttracker.utilities.simmetrics.builders.StringMetricBuilder;
-import com.lifttracker.utilities.simmetrics.metrics.CosineSimilarity;
-import com.lifttracker.utilities.simmetrics.metrics.Levenshtein;
 import com.lifttracker.utilities.simmetrics.metrics.StringMetrics;
-import com.lifttracker.utilities.simmetrics.simplifiers.Simplifiers;
-import com.lifttracker.utilities.simmetrics.tokenizers.Tokenizers;
-
-import org.joda.time.DateTime;
-
-import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.

@@ -32,9 +32,9 @@ public class MainPageViewFragment extends Fragment {
 
     private String myString = "hello";
 
-    public final ResponseAction<Integer> fabClickAction = new ResponseAction<Integer>() {
+    public final Runnable fabClickAction = new Runnable() {
         @Override
-        public void action(Integer o) {
+        public void run() {
             Fragment fragment = CreateWorkoutFragment.newInstance();
             ((FABInteractionActivity) getActivity())
                     .transitionFragment(R.id.fragment_container, fragment,

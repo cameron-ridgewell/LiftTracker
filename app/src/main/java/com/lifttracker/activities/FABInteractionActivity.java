@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public abstract class FABInteractionActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    public FABInteractionActivity clickAction(ArrayList<ResponseAction> responseActions)
+    public FABInteractionActivity clickAction(ArrayList<Runnable> responseActions)
     {
         return this;
     }

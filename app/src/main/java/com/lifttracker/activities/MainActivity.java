@@ -54,7 +54,7 @@ public class MainActivity extends  FABInteractionActivity {
     private DynamicFAB fab;
     private boolean myToggle;
 
-    private ArrayList<ResponseAction> fabResponseActions;
+    private ArrayList<Runnable> fabResponseActions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +73,7 @@ public class MainActivity extends  FABInteractionActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                fabResponseActions.get(0).action(null);
+                fabResponseActions.get(0).run();
             }
         });
 
@@ -219,7 +219,7 @@ public class MainActivity extends  FABInteractionActivity {
     }
 
     @Override
-    public FABInteractionActivity clickAction(ArrayList<ResponseAction> responseActions)
+    public FABInteractionActivity clickAction(ArrayList<Runnable> responseActions)
     {
         this.fabResponseActions = responseActions;
         return this;
@@ -228,7 +228,7 @@ public class MainActivity extends  FABInteractionActivity {
     @Override
     public FABInteractionActivity setupFragmentFAB(String fragment_name)
     {
-        ArrayList<ResponseAction> tmpArray = new ArrayList<>();
+        ArrayList<Runnable> tmpArray = new ArrayList<>();
         switch (fragment_name) {
             case MAIN_PAGE_VIEW_FRAGMENT:
                 try {
