@@ -13,4 +13,6 @@
     <color name="alt_text_light">#FFFFFF</color>
 
     <color name="primary_button_text_color">#FFFFFF</color>
+
+    <color name="white_standoff_shade">#EEEEEE</color>
 </resources>

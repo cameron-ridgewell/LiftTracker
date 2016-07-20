@@ -3,6 +3,7 @@ package com.lifttracker.elements;
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.UiThread;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import com.lifttracker.R;
 import com.lifttracker.common.Exercise;
 import com.lifttracker.common.ExerciseWithViewId;
 import com.lifttracker.common.SuperSetExerciseList;
+import com.lifttracker.fragments.CreateWorkoutFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +27,15 @@ public class CreateWorkoutListAdapter extends RecyclerView.Adapter<CreateWorkout
 
     private SuperSetExerciseList exercise_list;
     private Context mContext;
+    private boolean checkBoxesViewable;
+    private CreateWorkoutFragment container;
 
-    public CreateWorkoutListAdapter(Context context, SuperSetExerciseList exercise_list) {
+    public CreateWorkoutListAdapter(Context context, SuperSetExerciseList exercise_list,
+                                    CreateWorkoutFragment container) {
         this.exercise_list = exercise_list;
         this.mContext = context;
+        this.checkBoxesViewable = false;
+        this.container = container;
     }
 
     private Context getContext() {
@@ -49,7 +56,7 @@ public class CreateWorkoutListAdapter extends RecyclerView.Adapter<CreateWorkout
     }
 
     @Override
-    public void onBindViewHolder(CreateWorkoutListAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final CreateWorkoutListAdapter.ViewHolder holder, int position) {
         for (ExerciseWithViewId e : exercise_list.get(position))
         {
             if (holder.rootView.findViewById(e.getViewId()) != null)
@@ -58,7 +65,7 @@ public class CreateWorkoutListAdapter extends RecyclerView.Adapter<CreateWorkout
             }
             LayoutInflater layoutInflater = (LayoutInflater) getContext()
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View itemView = layoutInflater
+            final View itemView = layoutInflater
                     .inflate(R.layout.fragment_create_workout_exercise_item, null);
             itemView.setId(e.getViewId());
             TextView exercise_name =
@@ -71,19 +78,48 @@ public class CreateWorkoutListAdapter extends RecyclerView.Adapter<CreateWorkout
             LinearLayout supersetBlock =
                     (LinearLayout) itemView.findViewById(R.id.superset_block);
 
+            View checkboxLayout =  itemView.findViewById(R.id.checkboxlayout);
+
             if (exercise_list.isSuperset(position))
             {
                 supersetBlock.setVisibility(View.VISIBLE);
             }
             else
             {
-                supersetBlock.setVisibility(View.VISIBLE);
+                supersetBlock.setVisibility(View.GONE);
+            }
+
+            if (checkBoxesViewable)
+            {
+                checkboxLayout.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                checkboxLayout.setVisibility(View.INVISIBLE);
             }
 
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    return false;
+                    if (itemView.findViewById(R.id.checkboxlayout).getVisibility() == View.VISIBLE)
+                    {
+                        checkBoxesViewable = false;
+                        container.hideButton();
+                    }
+                    else
+                    {
+                        checkBoxesViewable = true;
+                        container.showButton("Group Selected", new Runnable() {
+                            @Override
+                            public void run() {
+                                checkBoxesViewable = false;
+                                container.hideButton();
+                                notifyDataSetChanged();
+                            }
+                        });
+                    }
+                    notifyDataSetChanged();
+                    return true;
                 }
             });
 

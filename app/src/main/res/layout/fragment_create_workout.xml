@@ -24,15 +24,24 @@
                 android:textColor="@color/alt_text_light"
                 android:textColorHint="@color/alt_text_light"/>
 
-            <com.lifttracker.elements.TimerButton
-                android:id="@+id/timer_button"
-                android:layout_alignParentRight="true"
+            <!--<com.lifttracker.elements.TimerButton-->
+                <!--android:id="@+id/timer_button"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="3dp"-->
+                <!--android:padding="8dp"-->
+                <!--app:fb_text="Timer | 00:00"-->
+                <!--style="@style/styled_button"/>-->
+            <mehdi.sakout.fancybuttons.FancyButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="3dp"
-                android:padding="8dp"
-                app:fb_text="Timer | 00:00"
-                style="@style/timer_button"/>
+                android:id="@+id/action_button"
+                android:layout_alignParentRight="true"
+                android:visibility="invisible"
+                app:fb_text="Group Selected"
+                style="@style/styled_button">
+            </mehdi.sakout.fancybuttons.FancyButton>
         </RelativeLayout>
 
         <Chronometer

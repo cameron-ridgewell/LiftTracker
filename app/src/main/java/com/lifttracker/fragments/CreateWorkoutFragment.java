@@ -34,6 +34,7 @@ public class CreateWorkoutFragment extends Fragment {
     private RecyclerView exercise_list_view;
     private FancyButton timerButton;
     private ExerciseSearchDialog exerciseSearchDialog;
+    private FancyButton actionButton;
 
     public final Runnable fabClickAction = new Runnable() {
         @Override
@@ -88,10 +89,10 @@ public class CreateWorkoutFragment extends Fragment {
 
         exercise_list_view = (RecyclerView) findViewById(R.id.list_view);
         itemsAdapter = new CreateWorkoutListAdapter(getContext(),
-                exerciseList);
+                exerciseList, this);
         exercise_list_view.setAdapter(itemsAdapter);
         exercise_list_view.setLayoutManager(new LinearLayoutManager(getContext()));
-        timerButton = (FancyButton) findViewById(R.id.timer_button);
+        actionButton = (FancyButton) findViewById(R.id.action_button);
 
         exerciseSearchDialog = ExerciseSearchDialog.newInstance();
 
@@ -132,16 +133,23 @@ public class CreateWorkoutFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+    public void showButton(String buttonText, final Runnable clickResponse)
+    {
+        actionButton.setVisibility(View.VISIBLE);
+        actionButton.setText(buttonText);
+        actionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clickResponse.run();
+            }
+        });
+    }
+
+    public void hideButton()
+    {
+        actionButton.setVisibility(View.INVISIBLE);
+    }
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);

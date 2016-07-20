@@ -9,8 +9,8 @@
     <dimen name="text_margin">16dp</dimen>
 
     <dimen name="superset_block_width">8dp</dimen>
-    <dimen name="superset_block_height">55dp</dimen>
-
+    <dimen name="superset_block_height">60dp</dimen>
+    <dimen name="list_separator_height">1dp</dimen>
     <dimen name="chart_height">300dp</dimen>
 
     <dimen name="primary_button_text_size">20dp</dimen>
