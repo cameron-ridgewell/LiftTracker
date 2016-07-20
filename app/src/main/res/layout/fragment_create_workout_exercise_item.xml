@@ -1,58 +1,75 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/create_workout_exercise_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:gravity="center_vertical"
     tools:context=".elements.ExerciseSearchFragmentAdapter">
-
-    <LinearLayout
-        android:layout_width="@dimen/superset_block_width"
-        android:layout_height="@dimen/superset_block_height"
-        android:background="@drawable/superset_side_rect"
-        android:id="@+id/superset_block"
-        android:orientation="vertical"/>
-
     <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/exercise_information_block"
-        android:padding="5dp"
-        android:layout_toEndOf="@+id/superset_block">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ExerciseTitle"
-            android:id="@+id/exercise_title"
-            style="@style/exercise_list_title_text"/>
-
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/exercise_title"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="@dimen/superset_block_width"
+                android:layout_height="@dimen/superset_block_height"
+                android:background="@drawable/superset_side_rect"
+                android:id="@+id/superset_block"
+                android:orientation="vertical"/>
 
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Weight x Reps"
-                android:id="@+id/set_info"
-                style="@style/set_info_list_text"/>
+                android:layout_height="@dimen/superset_block_height"
+                android:id="@+id/exercise_information_block"
+                android:padding="5dp"
+                android:layout_toEndOf="@+id/superset_block"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ExerciseTitle"
+                    android:id="@+id/exercise_title"
+                    style="@style/exercise_list_title_text"/>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/exercise_title"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Weight x Reps"
+                        android:id="@+id/set_info"
+                        style="@style/set_info_list_text"/>
+                </RelativeLayout>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/superset_block_height"
+                android:layout_alignParentRight="true"
+                android:id="@+id/checkboxlayout">
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/checkbox"
+                    android:padding="10dp"/>
+            </RelativeLayout>
         </RelativeLayout>
-    </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/superset_block_height"
-        android:layout_alignParentRight="true"
-        android:id="@+id/checkboxlayout">
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:padding="10dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/list_separator_height"
+            android:background="@drawable/list_separator"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_alignParentBottom="true">
+        </LinearLayout>
     </RelativeLayout>
-</RelativeLayout>
-
+</LinearLayout>
