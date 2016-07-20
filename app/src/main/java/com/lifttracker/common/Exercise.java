@@ -31,6 +31,15 @@ public class Exercise {
         this.timeLong_ = new DateTime(0).getMillis();
     }
 
+    public Exercise(Exercise exercise)
+    {
+        this.id_ = exercise.id_;
+        this.name_ = exercise.name_;
+        this.liftType_ = exercise.liftType_;
+        this.exerciseType_ = exercise.exerciseType_;
+        this.timeLong_ = exercise.timeLong_;
+    }
+
     public String getName() {
         return name_;
     }

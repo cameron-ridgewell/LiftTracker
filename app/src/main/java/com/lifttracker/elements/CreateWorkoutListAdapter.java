@@ -9,10 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lifttracker.R;
 import com.lifttracker.common.Exercise;
+import com.lifttracker.common.ExerciseWithViewId;
 import com.lifttracker.common.SuperSetExerciseList;
 
 import java.util.ArrayList;
@@ -38,7 +40,7 @@ public class CreateWorkoutListAdapter extends RecyclerView.Adapter<CreateWorkout
         LayoutInflater inflater = LayoutInflater.from(context);
 
         // Inflate the custom layout
-        View contactView = inflater.inflate(R.layout.fragment_create_workout_exercise_item, parent, false);
+        View contactView = inflater.inflate(R.layout.fragment_create_workout_item_holder, parent, false);
 
         // Return a new holder instance
         ViewHolder viewHolder = new ViewHolder(contactView);
@@ -47,23 +49,26 @@ public class CreateWorkoutListAdapter extends RecyclerView.Adapter<CreateWorkout
 
     @Override
     public void onBindViewHolder(CreateWorkoutListAdapter.ViewHolder holder, int position) {
-        // Get the data model based on position
-        Exercise exercise;
-        if (!exercise_list.isSuperset(position))
+        for (ExerciseWithViewId e : exercise_list.get(position))
         {
-            exercise = exercise_list.get(position).get(0);
-        }
-        else
-        {
-            //TODO iterate to get all exercises to inflate
-            exercise = exercise_list.get(position).get(0);
-        }
+            if (holder.rootView.findViewById(e.getViewId()) != null)
+            {
+                holder.remove(holder.rootView.findViewById(e.getViewId()));
+            }
+            LayoutInflater layoutInflater = (LayoutInflater) getContext()
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View itemView = layoutInflater
+                    .inflate(R.layout.fragment_create_workout_exercise_item, null);
+            itemView.setId(e.getViewId());
+            TextView exercise_name =
+                    (TextView) itemView.findViewById(R.id.exercise_name);
+            TextView exercise_name_alt_text =
+                    (TextView) itemView.findViewById(R.id.exercise_name_alt_text);
+            exercise_name.setText(e.getName());
+            exercise_name_alt_text.setText(e.getName());
 
-        // Set item views based on your views and data model
-        TextView exercise_name = holder.exercise_name;
-        TextView exercise_name_alt_text = holder.exercise_name_alt_text;
-        exercise_name.setText(exercise.getName());
-        exercise_name_alt_text.setText(exercise.getName());
+            holder.add(itemView);
+        }
     }
 
     @Override
@@ -72,15 +77,21 @@ public class CreateWorkoutListAdapter extends RecyclerView.Adapter<CreateWorkout
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView exercise_name;
-        public TextView exercise_name_alt_text;
+        private View rootView;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            rootView = itemView;
+        }
 
-            exercise_name = (TextView) itemView.findViewById(R.id.exercise_name);
-            exercise_name_alt_text = (TextView) itemView.findViewById(R.id.exercise_name_alt_text);
+        public void add(View view)
+        {
+            ((LinearLayout) rootView.findViewById(R.id.linear_layout_container)).addView(view);
+        }
 
+        public void remove(View view)
+        {
+            ((LinearLayout) rootView.findViewById(R.id.linear_layout_container)).removeView(view);
         }
     }
 }

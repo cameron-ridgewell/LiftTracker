@@ -93,9 +93,6 @@ public class CreateWorkoutFragment extends Fragment {
         exercise_list_view.setLayoutManager(new LinearLayoutManager(getContext()));
         timerButton = (FancyButton) findViewById(R.id.timer_button);
 
-        //exerciseList.add(new Exercise("Exercise Name"));
-        itemsAdapter.notifyDataSetChanged();
-
         exerciseSearchDialog = ExerciseSearchDialog.newInstance();
 
         ResponseAction<Exercise> itemClickedAction = new ResponseAction<Exercise>()
@@ -104,7 +101,7 @@ public class CreateWorkoutFragment extends Fragment {
             public void action(Exercise exercise) {
                 exerciseList.add(exercise);
                 Log.e("Exercise Added", exerciseList.get(exerciseList.size() - 1).get(0).getName());
-                dataSetChanged();
+                itemsAdapter.notifyItemInserted(exerciseList.size() - 1);
             }
         };
         exerciseSearchDialog.addClickedAction(itemClickedAction);
@@ -153,25 +150,5 @@ public class CreateWorkoutFragment extends Fragment {
     private View findViewById(int id)
     {
         return rootView.findViewById(id);
-    }
-
-    private void dataSetChanged()
-    {
-        new Thread() {
-            public void run() {
-                try {
-                    getActivity().runOnUiThread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            itemsAdapter.notifyDataSetChanged();
-                        }
-                    });
-                    Thread.sleep(300);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }.start();
     }
 }
