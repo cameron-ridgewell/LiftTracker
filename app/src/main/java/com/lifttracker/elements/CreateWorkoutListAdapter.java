@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lifttracker.R;
@@ -61,11 +62,30 @@ public class CreateWorkoutListAdapter extends RecyclerView.Adapter<CreateWorkout
                     .inflate(R.layout.fragment_create_workout_exercise_item, null);
             itemView.setId(e.getViewId());
             TextView exercise_name =
-                    (TextView) itemView.findViewById(R.id.exercise_name);
+                    (TextView) itemView.findViewById(R.id.exercise_title);
             TextView exercise_name_alt_text =
-                    (TextView) itemView.findViewById(R.id.exercise_name_alt_text);
+                    (TextView) itemView.findViewById(R.id.set_info);
             exercise_name.setText(e.getName());
             exercise_name_alt_text.setText(e.getName());
+
+            LinearLayout supersetBlock =
+                    (LinearLayout) itemView.findViewById(R.id.superset_block);
+
+            if (exercise_list.isSuperset(position))
+            {
+                supersetBlock.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                supersetBlock.setVisibility(View.VISIBLE);
+            }
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    return false;
+                }
+            });
 
             holder.add(itemView);
         }
