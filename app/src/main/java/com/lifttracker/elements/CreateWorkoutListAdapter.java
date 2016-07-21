@@ -28,8 +28,11 @@ public class CreateWorkoutListAdapter extends RecyclerView.Adapter<CreateWorkout
 
     private SuperSetExerciseList exercise_list;
     private Context mContext;
-    private boolean checkBoxesViewable;
     private CreateWorkoutFragment container;
+
+    private boolean checkBoxesViewable;
+    private boolean groupItemsCalled;
+    private int topSelectedPosition;
 
     public CreateWorkoutListAdapter(Context context, SuperSetExerciseList exercise_list,
                                     CreateWorkoutFragment container) {
@@ -39,8 +42,10 @@ public class CreateWorkoutListAdapter extends RecyclerView.Adapter<CreateWorkout
         exercise_list.addTo(1, new Exercise("Being Awesome"));
         exercise_list.add(new Exercise("Drinking Wine"));
         this.mContext = context;
-        this.checkBoxesViewable = false;
         this.container = container;
+        this.checkBoxesViewable = false;
+        this.groupItemsCalled = false;
+        this.topSelectedPosition = -1;
     }
 
     private Context getContext() {
@@ -61,8 +66,8 @@ public class CreateWorkoutListAdapter extends RecyclerView.Adapter<CreateWorkout
     }
 
     @Override
-    public void onBindViewHolder(final CreateWorkoutListAdapter.ViewHolder holder, int position) {
-        for (ExerciseWithViewId e : exercise_list.get(position))
+    public void onBindViewHolder(final CreateWorkoutListAdapter.ViewHolder holder, final int position) {
+        for (final ExerciseWithViewId e : exercise_list.get(position))
         {
             Log.e("Handling", e.getName());
             if (holder.rootView.findViewById(e.getViewId()) != null)
@@ -74,7 +79,7 @@ public class CreateWorkoutListAdapter extends RecyclerView.Adapter<CreateWorkout
             final View itemView = layoutInflater
                     .inflate(R.layout.fragment_create_workout_exercise_item, null);
             itemView.setId(e.getViewId());
-            TextView exercise_name =
+            final TextView exercise_name =
                     (TextView) itemView.findViewById(R.id.exercise_title);
             TextView exercise_name_alt_text =
                     (TextView) itemView.findViewById(R.id.set_info);
@@ -92,11 +97,11 @@ public class CreateWorkoutListAdapter extends RecyclerView.Adapter<CreateWorkout
                 public void onClick(View view) {
                     if (((CheckBox) view).isChecked())
                     {
-
+                        e.select();
                     }
                     else
                     {
-
+                        e.deselect();
                     }
                 }
             });
@@ -135,6 +140,7 @@ public class CreateWorkoutListAdapter extends RecyclerView.Adapter<CreateWorkout
                             public void run() {
                                 checkBoxesViewable = false;
                                 container.hideButton();
+                                groupItemsCalled = true;
                                 notifyDataSetChanged();
                             }
                         });
@@ -144,10 +150,20 @@ public class CreateWorkoutListAdapter extends RecyclerView.Adapter<CreateWorkout
                 }
             });
 
-            if (true) //(e.getName() != "Bicep Curl") {
+            if (groupItemsCalled)
             {
-                holder.add(itemView);
+                if (topSelectedPosition < 0)
+                {
+                    
+                }
             }
+
+            holder.add(itemView);
+        }
+
+        if (position == exercise_list.size()-1)
+        {
+            groupItemsCalled = false;
         }
     }
 

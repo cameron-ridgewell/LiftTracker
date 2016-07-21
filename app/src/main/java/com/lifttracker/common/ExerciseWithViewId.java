@@ -8,15 +8,25 @@ import android.view.View;
  */
 public class ExerciseWithViewId extends Exercise{
     private int id;
+    private boolean selected;
     public ExerciseWithViewId(String name) {
         super(name);
         this.id = View.generateViewId();
+        this.selected = false;
     }
 
     public ExerciseWithViewId(Exercise exercise) {
         super(exercise);
-        Log.e("Tag", exercise.getName());
         this.id = View.generateViewId();
+        this.selected = false;
+    }
+
+    public ExerciseWithViewId(ExerciseWithViewId exercise)
+    {
+        super(exercise);
+        this.id = exercise.id;
+        this.selected = exercise.selected;
+
     }
 
     public int getViewId() {
@@ -25,5 +35,20 @@ public class ExerciseWithViewId extends Exercise{
 
     public void setViewId(int id) {
         this.id = id;
+    }
+
+    public void select()
+    {
+        selected = true;
+    }
+
+    public void deselect()
+    {
+        selected = false;
+    }
+
+    public boolean isSelected()
+    {
+        return selected;
     }
 }
