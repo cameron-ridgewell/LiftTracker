@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -33,6 +34,10 @@ public class CreateWorkoutListAdapter extends RecyclerView.Adapter<CreateWorkout
     public CreateWorkoutListAdapter(Context context, SuperSetExerciseList exercise_list,
                                     CreateWorkoutFragment container) {
         this.exercise_list = exercise_list;
+        exercise_list.add(new Exercise("Walking"));
+        exercise_list.add(new Exercise("Bicep Curl"));
+        exercise_list.addTo(1, new Exercise("Being Awesome"));
+        exercise_list.add(new Exercise("Drinking Wine"));
         this.mContext = context;
         this.checkBoxesViewable = false;
         this.container = container;
@@ -59,6 +64,7 @@ public class CreateWorkoutListAdapter extends RecyclerView.Adapter<CreateWorkout
     public void onBindViewHolder(final CreateWorkoutListAdapter.ViewHolder holder, int position) {
         for (ExerciseWithViewId e : exercise_list.get(position))
         {
+            Log.e("Handling", e.getName());
             if (holder.rootView.findViewById(e.getViewId()) != null)
             {
                 holder.remove(holder.rootView.findViewById(e.getViewId()));
@@ -79,6 +85,21 @@ public class CreateWorkoutListAdapter extends RecyclerView.Adapter<CreateWorkout
                     (LinearLayout) itemView.findViewById(R.id.superset_block);
 
             View checkboxLayout =  itemView.findViewById(R.id.checkboxlayout);
+
+            CheckBox checkBox = (CheckBox) itemView.findViewById(R.id.checkbox);
+            checkBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (((CheckBox) view).isChecked())
+                    {
+
+                    }
+                    else
+                    {
+
+                    }
+                }
+            });
 
             if (exercise_list.isSuperset(position))
             {
@@ -123,7 +144,10 @@ public class CreateWorkoutListAdapter extends RecyclerView.Adapter<CreateWorkout
                 }
             });
 
-            holder.add(itemView);
+            if (true) //(e.getName() != "Bicep Curl") {
+            {
+                holder.add(itemView);
+            }
         }
     }
 
